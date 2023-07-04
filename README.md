@@ -1,62 +1,45 @@
-# Nextjs Husky Template
+# Json Viewer
 
-This is a [Next.js](https://nextjs.org/) project template bootstraped with [Pretiier](https://prettier.io/), Prettier-tailwindcss-plugin, [Husky](https://typicode.github.io/husky/) and [lint-staged](https://github.com/okonet/lint-staged)
+Visualisation tool to help visualise json format in Graph and Tree form.
 
-## Why
+## Development setup 🛠
 
-Linting and code formatting makes more sense when run before committing your code. By doing so you can ensure no errors go into the repository and enforce code style. But running a lint process on a whole project is slow, and linting results can be irrelevant. Ultimately you only want to lint files that will be committed.
+Steps to locally setup development after cloning the project.
 
-1. Prettier - Code is formatted on save - Same code formatting throughtout the codebase - No need to discuss code style in code review
-
-2. Prettier-tailwindcss-plugin - Formats tailwindcss classes - Each contributer will have same tailwindcss class sequence
-
-3. Husky - Create a pre commmit hook - Run a script on staged code before committing.
-
-4. Lint-staged - Ensure no errors go into the repository and enforce code style.
-
-## Customise
-
-To set code style of your liking edit `prettier.config.js`
-
-Note: After changing code styles run this commands to format the codebase as your code style
-
-```bash
-npx prettier --write *
-npx prettier --write ./src
+```sh
+git clone https://github.com/BUMBAIYA/jsonviewer.git
 ```
 
-Add a pre commit hook use or [refer](https://typicode.github.io/husky/getting-started.html#create-a-hook)
+### Step 1 - NodeJS
 
-```bash
-npx husky add .husky/pre-commit "# New Hook"
+You will need:
+
+- [node](https://nodejs.org/)
+
+Please install them if you don't have them already.
+
+### Step 2 - Install dependencies
+
+```shell
+cd jsonviewer
 ```
 
-To add new lint stage edit `.lintstagedrc.json` or [refer](https://github.com/okonet/lint-staged#readme)
-
-## Getting Started
-
-Clone the repo
-
-```bash
-git clone https://github.com/BUMBAIYA/nextjs-husky-template
-```
-
-Important: Install dependencies before changing files.
-
-Run this command in project root folder
-
-```bash
+```shell
 npm install
 ```
 
-Important: Edit the name in `package.json` file as your project name
+### Step 3 - Run app
 
-Delete the `.git` folder from the repo Note: Enable show hidden folder to show `.git` folder on windows
+Once the dependencies are installed, you can run the app:
 
-Initialize new local repo
-
-```bash
-git init .
-git add .
-git commit -m "Initial commit"
+```shell
+npm run dev
 ```
+
+Your application should be running on `http://localhost:3000`.
+
+## License
+
+Licensed under the MIT license.
+
+---
