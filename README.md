@@ -1,4 +1,4 @@
-# Json Viewer
+# JsonTree Visualizer
 
 Visualisation tool to help visualise json format in Graph and Tree form.
 
