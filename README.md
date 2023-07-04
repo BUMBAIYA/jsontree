@@ -7,7 +7,7 @@ Visualisation tool to help visualise json format in Graph and Tree form.
 Steps to locally setup development after cloning the project.
 
 ```sh
-git clone https://github.com/BUMBAIYA/jsonviewer.git
+git clone https://github.com/BUMBAIYA/jsontree.git
 ```
 
 ### Step 1 - NodeJS
@@ -21,7 +21,7 @@ Please install them if you don't have them already.
 ### Step 2 - Install dependencies
 
 ```shell
-cd jsonviewer
+cd jsontree
 ```
 
 ```shell

@@ -16,7 +16,7 @@ export default function Home() {
         <div className="relative h-16 w-16">
           <LogoIcon />
         </div>
-        <h1 className="text-6xl font-semibold">JSON Viewer</h1>
+        <h1 className="text-6xl font-semibold">JSON Tree Visualizer</h1>
       </div>
       <p className="px-10 text-base">
         JSON visualization tool as a graph and tree (In Development).
