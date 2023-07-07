@@ -3,6 +3,8 @@ import { PageSEO } from "@/components/PageSEO";
 import { classNames } from "@/utility/classNames";
 import { LogoIcon } from "@/components/Icons";
 import MonacoEditor from "@/components/LiveEditor";
+import { Allotment } from "allotment";
+import "allotment/dist/style.css";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -19,19 +21,27 @@ export default function Home() {
           "h-[calc(100vh-58px)] overflow-hidden",
         )}
       >
-        <header className="flex items-center gap-2 border border-zinc-200 px-10 py-3">
-          <div className="relative h-7 w-7">
-            <LogoIcon />
+        <header className="flex h-14 items-center justify-between gap-2 border-b border-zinc-200 px-10 py-3">
+          <div className="flex items-center gap-2">
+            <div className="relative h-7 w-7">
+              <LogoIcon />
+            </div>
+            <h1 className="text-base font-semibold">Json Tree</h1>
           </div>
-          <h1 className="text-base font-semibold">Json Tree</h1>
         </header>
-        <main className="flex h-full flex-col md:flex-row">
-          <div className="h-full w-full md:w-1/2 lg:w-2/3">
-            <MonacoEditor />
-          </div>
-          <div className="flex w-full items-center justify-center">
-            <span>Editor (in Development)</span>
-          </div>
+        <main className="flex h-[calc(100vh-114px)] flex-col md:flex-row">
+          <Allotment defaultSizes={[100, 300]}>
+            <Allotment.Pane
+              className="h-full w-full md:w-1/2 lg:w-2/3"
+              minSize={450}
+              maxSize={700}
+            >
+              <MonacoEditor />
+            </Allotment.Pane>
+            <Allotment.Pane className="flex w-full items-center justify-center">
+              <span>Editor (in Development)</span>
+            </Allotment.Pane>
+          </Allotment>
         </main>
       </div>
       <footer className="z-[999] w-full border border-zinc-200 bg-white">

@@ -1,4 +1,4 @@
-import { Editor } from "@monaco-editor/react";
+import Editor from "@monaco-editor/react";
 import { JSON_TEMPLATE } from "../data";
 
 const editorOptions = {
