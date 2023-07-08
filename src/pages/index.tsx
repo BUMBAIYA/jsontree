@@ -2,10 +2,11 @@ import { Montserrat } from "next/font/google";
 import { PageSEO } from "@/components/PageSEO";
 import { classNames } from "@/utility/classNames";
 import { LogoIcon } from "@/components/Icons";
-import MonacoEditor from "@/components/LiveEditor";
 import { Allotment } from "allotment";
+import MonacoEditor from "@/components/MonacoEditor";
+import TreeEditor from "@/components/TreeEditor";
+import EditorInfobar from "@/components/MonacoEditor/EditorInfobar";
 import "allotment/dist/style.css";
-import EditorInfobar from "@/components/LiveEditor/EditorInfobar";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -39,8 +40,8 @@ export default function Home() {
             >
               <MonacoEditor />
             </Allotment.Pane>
-            <Allotment.Pane className="flex w-full items-center justify-center">
-              <span>Editor (in Development)</span>
+            <Allotment.Pane className="relative flex w-full items-center justify-center">
+              <TreeEditor />
             </Allotment.Pane>
           </Allotment>
         </main>
