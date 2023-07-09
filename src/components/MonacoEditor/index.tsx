@@ -1,6 +1,12 @@
-import Editor from "@monaco-editor/react";
+import Editor, { loader } from "@monaco-editor/react";
 import { JSON_TEMPLATE } from "@/constants/json";
 import { useApp } from "@/store/useApp";
+
+loader.config({
+  paths: {
+    vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs",
+  },
+});
 
 const editorOptions = {
   formatOnPaste: true,
