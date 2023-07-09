@@ -1,16 +1,33 @@
+import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
+import { useEffect } from "react";
 import { Montserrat } from "next/font/google";
 import { PageSEO } from "@/components/PageSEO";
 import { classNames } from "@/utility/classNames";
 import { LogoIcon } from "@/components/Icons";
 import { Allotment } from "allotment";
 import MonacoEditor from "@/components/MonacoEditor";
-import TreeEditor from "@/components/TreeEditor";
 import EditorInfobar from "@/components/MonacoEditor/EditorInfobar";
 import "allotment/dist/style.css";
+import { useApp } from "@/store/useApp";
+import { JSON_TEMPLATE } from "@/constants/json";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
+const TreeEditor = dynamic(() => import("@/components/TreeEditor"), {
+  ssr: false,
+});
+
 export default function Home() {
+  const { isReady } = useRouter();
+  const setContents = useApp((state) => state.setContents);
+
+  useEffect(() => {
+    if (isReady) {
+      setContents({ contents: JSON_TEMPLATE, hasChanges: false });
+    }
+  }, [isReady, setContents]);
+
   return (
     <div className="h-screen">
       <PageSEO

@@ -182,7 +182,7 @@ export const useTree = create<Graph & GraphActions>((set, get) => ({
   },
   centerView: () => {
     const zoomPanPinch = get().zoomPanPinch;
-    const canvas = document.querySelector(".jsoncrack-canvas") as HTMLElement;
+    const canvas = document.querySelector(".jsontree-canvas") as HTMLElement;
     if (zoomPanPinch && canvas) zoomPanPinch.zoomToElement(canvas);
   },
   toggleFold: (foldNodes) => {

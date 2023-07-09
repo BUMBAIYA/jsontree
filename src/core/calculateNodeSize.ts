@@ -1,6 +1,7 @@
 import { DM_Mono } from "next/font/google";
 import { useTree } from "@/store/useTree";
 import { useStored } from "@/store/useStored";
+import { isImageUrl } from "@/utility/checkFormat";
 
 const firaMono = DM_Mono({
   weight: ["500"],
@@ -10,7 +11,7 @@ const firaMono = DM_Mono({
 export const isContentImage = (value: string | [string, string][]) => {
   if (typeof value !== "string") return false;
 
-  const isImageURL = /(https?:\/\/.*\.(?:png|jpg|gif))/i.test(value);
+  const isImageURL = isImageUrl(value);
   const isBase64 = value.startsWith("data:image/") && value.includes("base64");
   return isImageURL || isBase64;
 };

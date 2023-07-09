@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import {
   ReactZoomPanPinchRef,
   TransformComponent,
@@ -5,7 +6,11 @@ import {
 } from "react-zoom-pan-pinch";
 import { useTree } from "@/store/useTree";
 import useToggleHide from "@/hooks/useToggleHide";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { Edge, EdgeProps, ElkRoot, NodeProps } from "reaflow";
+import { CustomNode } from "@/core/node";
+
+const Canvas = dynamic(() => import("reaflow").then((r) => r.Canvas));
 
 export default function TreeEditor() {
   const loading = useTree((state) => state.loading);
@@ -13,7 +18,6 @@ export default function TreeEditor() {
   const setLoading = useTree((state) => state.setLoading);
   const setZoomPanPinch = useTree((state) => state.setZoomPanPinch);
   const centerView = useTree((state) => state.centerView);
-  const setSelectedNode = useTree((state) => state.setSelectedNode);
 
   const direction = useTree((state) => state.direction);
   const nodes = useTree((state) => state.nodes);
@@ -29,41 +33,102 @@ export default function TreeEditor() {
     [setZoomPanPinch],
   );
 
+  const onLayoutChange = useCallback(
+    (layout: ElkRoot) => {
+      if (layout.width && layout.height) {
+        const areaSize = layout.width * layout.height;
+        const changeRatio = Math.abs(
+          (areaSize * 100) / (paneWidth * paneHeight) - 100,
+        );
+
+        setPaneWidth(layout.width + 50);
+        setPaneHeight((layout.height as number) + 50);
+
+        setTimeout(() => {
+          setLoading(false);
+          validateHiddenNodes();
+          window.requestAnimationFrame(() => {
+            if (changeRatio > 70 || false) centerView();
+          });
+        });
+      }
+    },
+    [centerView, paneHeight, paneWidth, setLoading, validateHiddenNodes],
+  );
+
+  const memoizedNode = useCallback(
+    (props: JSX.IntrinsicAttributes & NodeProps<any>) => (
+      <CustomNode {...props} animated={false} />
+    ),
+    [],
+  );
+
+  const memoizedEdge = useCallback(
+    (props: JSX.IntrinsicAttributes & Partial<EdgeProps>) => (
+      <Edge {...props} containerClassName={`edge-${props.id}`} />
+    ),
+    [],
+  );
+
   return (
     <>
       {loading && (
         <div className="pointer-events-none absolute inset-0 left-0 top-0 z-50 flex items-center justify-center bg-white">
           <div className="text-base">
-            <span>Loading tree...</span>
+            <span>Edit Json file to see changes</span>
           </div>
         </div>
       )}
-      <TransformWrapper
-        maxScale={2}
-        minScale={0.05}
-        initialScale={0.4}
-        wheel={{ step: 0.04 }}
-        zoomAnimation={{ animationType: "linear" }}
-        doubleClick={{ disabled: true }}
-        onInit={onInit}
-        onPanning={(ref) =>
-          ref.instance.wrapperComponent?.classList.add("pointer-events-none")
-        }
-        onPanningStop={(ref) =>
-          ref.instance.wrapperComponent?.classList.remove("pointer-events-none")
-        }
-      >
-        <TransformComponent
-          wrapperStyle={{
-            width: "100%",
-            height: "100%",
-            overflow: "hidden",
-            display: loading ? "none" : "block",
-          }}
+      <div className="absolute h-[calc(100vh-84px)] w-full">
+        <TransformWrapper
+          maxScale={2}
+          minScale={0.05}
+          initialScale={0.4}
+          wheel={{ step: 0.04 }}
+          zoomAnimation={{ animationType: "linear" }}
+          doubleClick={{ disabled: true }}
+          onInit={onInit}
+          onPanning={(ref) =>
+            ref.instance.wrapperComponent?.classList.add("pointer-events-none")
+          }
+          onPanningStop={(ref) =>
+            ref.instance.wrapperComponent?.classList.remove(
+              "pointer-events-none",
+            )
+          }
         >
-          <div></div>
-        </TransformComponent>
-      </TransformWrapper>
+          <TransformComponent
+            wrapperStyle={{
+              width: "100%",
+              height: "100%",
+              overflow: "hidden",
+              display: loading ? "none" : "block",
+            }}
+          >
+            <Canvas
+              className="jsontree-canvas"
+              nodes={nodes}
+              edges={edges}
+              maxHeight={paneHeight}
+              maxWidth={paneWidth}
+              height={paneHeight}
+              width={paneWidth}
+              direction={direction}
+              onLayoutChange={onLayoutChange}
+              node={memoizedNode}
+              edge={memoizedEdge}
+              key={direction}
+              pannable={false}
+              zoomable={false}
+              animated={false}
+              readonly={true}
+              dragEdge={null}
+              dragNode={null}
+              fit={true}
+            />
+          </TransformComponent>
+        </TransformWrapper>
+      </div>
     </>
   );
 }

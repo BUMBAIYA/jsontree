@@ -1,5 +1,4 @@
 import Editor, { loader } from "@monaco-editor/react";
-import { JSON_TEMPLATE } from "@/constants/json";
 import { useApp } from "@/store/useApp";
 
 loader.config({
@@ -17,15 +16,19 @@ const editorOptions = {
 };
 
 export default function MonacoEditor() {
+  const contents = useApp((state) => state.contents);
+  const setContents = useApp((state) => state.setContents);
   const setError = useApp((state) => state.setError);
+
   return (
     <Editor
       className="h-screen md:h-full"
-      defaultLanguage="json"
+      language="json"
       height="100%"
+      value={contents}
       options={editorOptions}
       onValidate={(errors) => setError(errors[0]?.message)}
-      defaultValue={JSON_TEMPLATE}
+      onChange={(contents) => setContents({ contents, skipUpdate: true })}
     />
   );
 }

@@ -20,21 +20,10 @@ interface JsonActions {
   clear: () => void;
 }
 
-export type File = {
-  _id: string;
-  name: string;
-  json: string;
-  private: boolean;
-  createdAt: string;
-  updatedAt: string;
-};
-
 const initialStates = {
-  fileData: null as File | null,
   contents: JSON_TEMPLATE,
   error: null as any,
   hasChanges: false,
-  jsonSchema: null as object | null,
 };
 
 export type FileStates = typeof initialStates;

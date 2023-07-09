@@ -1,6 +1,6 @@
 const contentToJson = async (value: string): Promise<object> => {
   try {
-    let json: JSON = JSON.parse(value);
+    let json: object = JSON.parse(value);
     return Promise.resolve(json);
   } catch (error: any) {
     throw error;
