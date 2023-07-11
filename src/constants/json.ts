@@ -4,6 +4,12 @@ const sampleJson = Object.freeze({
   formed: 2016,
   secretBase: "Super tower",
   active: true,
+  leader: {
+    name: "Iron Man",
+    age: 54,
+    secretIdentity: "Tony stark",
+    powers: ["Nano tech suit", "Speed", "Jetpack", "Missiles"],
+  },
   members: [
     {
       name: "Molecule Man",
