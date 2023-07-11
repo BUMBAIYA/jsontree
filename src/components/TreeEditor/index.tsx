@@ -1,4 +1,6 @@
 import dynamic from "next/dynamic";
+import { useCallback, useState } from "react";
+import { Edge, EdgeProps, ElkRoot, NodeProps } from "reaflow";
 import {
   ReactZoomPanPinchRef,
   TransformComponent,
@@ -6,8 +8,6 @@ import {
 } from "react-zoom-pan-pinch";
 import { useTree } from "@/store/useTree";
 import useToggleHide from "@/hooks/useToggleHide";
-import { useCallback, useEffect, useState } from "react";
-import { Edge, EdgeProps, ElkRoot, NodeProps } from "reaflow";
 import { CustomNode } from "@/core/node";
 
 const Canvas = dynamic(() => import("reaflow").then((r) => r.Canvas));
@@ -75,11 +75,14 @@ export default function TreeEditor() {
       {loading && (
         <div className="pointer-events-none absolute inset-0 left-0 top-0 z-50 flex items-center justify-center bg-white">
           <div className="text-base">
-            <span>Edit Json file to see changes</span>
+            <span>Building graph...</span>
           </div>
         </div>
       )}
-      <div className="absolute h-[calc(100vh-84px)] w-full">
+      <div
+        // onContextMenu={(e) => e.preventDefault()}
+        className="absolute h-[calc(100vh-84px)] w-full active:!cursor-move"
+      >
         <TransformWrapper
           maxScale={2}
           minScale={0.05}
