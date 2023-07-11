@@ -2,6 +2,10 @@ import { FC, memo } from "react";
 import { CustomNodeProps } from "@/core/node";
 import { ForeignNodeWrapper } from "@/core/node/NodeComponents/ForeignNodeWrapper";
 import { TextRenderer } from "@/core/node/TextRenderer";
+import {
+  getKeyColor,
+  getValueColor,
+} from "@/core/node/NodeComponents/getColors";
 
 const Node: FC<CustomNodeProps> = ({ node, x, y }) => {
   const { text, width, height, data } = node;
@@ -9,19 +13,24 @@ const Node: FC<CustomNodeProps> = ({ node, x, y }) => {
 
   return (
     <ForeignNodeWrapper isObject width={width} height={height}>
-      <span className="flex h-full items-center font-mono">
-        <span className="flex flex-col">
+      <span className="flex h-full items-center">
+        <span className="flex flex-col" style={{ fontSize: "12px" }}>
           {text.map((val: any, idx: any) => {
             return (
               <span
-                style={{ fontSize: "12px", display: "block" }}
-                className="overflow-hidden text-ellipsis whitespace-nowrap px-2"
+                className="block overflow-hidden text-ellipsis whitespace-nowrap px-2 text-xs"
                 key={idx}
               >
-                <span className="inline overflow-hidden text-ellipsis whitespace-nowrap p-2">
+                <span
+                  style={{ color: getKeyColor({ objectKey: true }) }}
+                  className="inline overflow-hidden text-ellipsis whitespace-nowrap p-2"
+                >
                   {JSON.stringify(val[0]).replaceAll('"', "")}:{" "}
                 </span>
-                <TextRenderer innerText={JSON.stringify(val[1])} />
+                <TextRenderer
+                  style={{ color: getValueColor(JSON.stringify(val[1])) }}
+                  innerText={JSON.stringify(val[1])}
+                />
               </span>
             );
           })}

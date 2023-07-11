@@ -4,6 +4,8 @@ import { useTree } from "@/store/useTree";
 import { useStored } from "@/store/useStored";
 import { ForeignNodeWrapper } from "@/core/node/NodeComponents/ForeignNodeWrapper";
 import { TextRenderer } from "@/core/node/TextRenderer";
+import { getKeyColor } from "@/core/node//NodeComponents/getColors";
+import { classNames } from "@/utility/classNames";
 
 const Node: FC<CustomNodeProps> = ({ node, x, y, hasCollapse = false }) => {
   const {
@@ -28,13 +30,16 @@ const Node: FC<CustomNodeProps> = ({ node, x, y, hasCollapse = false }) => {
 
   return (
     <ForeignNodeWrapper width={width} height={height} isObject={false}>
-      <span className="flex h-full w-full items-center justify-center">
-        <span
-          className="inline overflow-hidden whitespace-nowrap font-medium"
-          style={{ fontSize: "10px" }}
-        >
-          <TextRenderer innerText={JSON.stringify(text).replaceAll('"', "")} />
-        </span>
+      <span
+        className={classNames("flex h-full w-full items-center justify-center")}
+        style={{
+          color: getKeyColor({ parent: isParent, type: type }),
+        }}
+      >
+        <TextRenderer
+          style={{ fontSize: isParent ? "12px" : "10px" }}
+          innerText={JSON.stringify(text).replaceAll('"', "")}
+        />
       </span>
     </ForeignNodeWrapper>
   );
