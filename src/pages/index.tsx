@@ -11,6 +11,8 @@ import EditorInfobar from "@/components/MonacoEditor/EditorInfobar";
 import "allotment/dist/style.css";
 import { useApp } from "@/store/useApp";
 import { JSON_TEMPLATE } from "@/constants/json";
+import { useTree } from "@/store/useTree";
+import Navbar from "@/components/Navbar";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -40,20 +42,14 @@ export default function Home() {
           "h-[calc(100vh-28px)] overflow-hidden",
         )}
       >
-        <header className="flex h-14 items-center justify-between gap-2 border-b border-zinc-300 px-10 py-3">
-          <div className="flex items-center gap-2">
-            <div className="relative h-7 w-7">
-              <LogoIcon />
-            </div>
-            <h1 className="text-base font-semibold">Json Tree</h1>
-          </div>
-        </header>
+        <Navbar />
         <main className="flex h-[calc(100vh-84px)] flex-col md:flex-row">
           <Allotment defaultSizes={[100, 300]}>
             <Allotment.Pane
               className="h-full w-full md:w-1/2 lg:w-2/3"
               minSize={450}
               maxSize={700}
+              visible
             >
               <MonacoEditor />
             </Allotment.Pane>
