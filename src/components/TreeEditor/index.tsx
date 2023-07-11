@@ -80,7 +80,7 @@ export default function TreeEditor() {
         </div>
       )}
       <div
-        // onContextMenu={(e) => e.preventDefault()}
+        onContextMenu={(e) => e.preventDefault()}
         className="absolute h-[calc(100vh-84px)] w-full active:!cursor-move"
       >
         <TransformWrapper

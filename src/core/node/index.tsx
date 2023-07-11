@@ -21,6 +21,8 @@ export const CustomNode = (nodeProps: NodeProps) => {
   return (
     <Node
       {...nodeProps}
+      rx={5}
+      ry={5}
       {...(data.isEmpty && rootProps)}
       label={<React.Fragment />}
     >
