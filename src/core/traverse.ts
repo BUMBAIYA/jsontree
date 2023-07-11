@@ -140,8 +140,7 @@ function handleHasChildren(
     ) {
       addEdgeToGraph(
         graph,
-        brothersProps[brothersProps.length - 1].parentId ??
-          brothersProps[brothersProps.length - 1].id,
+        brothersProps[brothersProps.length - 1].id,
         parentId,
       );
     } else if (myParentId) {
