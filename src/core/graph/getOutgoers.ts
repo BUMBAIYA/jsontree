@@ -1,3 +1,5 @@
+import { EdgeData, NodeData } from "@/core/type";
+
 export const getOutgoers = (
   nodeId: string,
   nodes: NodeData[],

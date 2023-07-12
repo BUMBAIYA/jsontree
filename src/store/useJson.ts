@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { useTree } from "./useTree";
+import { useTree } from "@/store/useTree";
 
 type JsonActions = {
   setJson: (json: string) => void;

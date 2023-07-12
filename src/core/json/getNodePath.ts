@@ -1,3 +1,5 @@
+import { EdgeData, NodeData } from "@/core/type";
+
 export function getNodePath(
   nodes: NodeData[],
   edges: EdgeData[],

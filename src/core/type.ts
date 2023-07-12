@@ -1,4 +1,6 @@
-interface NodeData<T = any> {
+import { ElkNodeLayoutOptions, IconData, PortData } from "reaflow";
+
+export interface NodeData<T = any> {
   id: string;
   disabled?: boolean;
   text?: any;
@@ -15,7 +17,7 @@ interface NodeData<T = any> {
   selectionDisabled?: boolean;
 }
 
-interface EdgeData<T = any> {
+export interface EdgeData<T = any> {
   id: string;
   disabled?: boolean;
   text?: any;

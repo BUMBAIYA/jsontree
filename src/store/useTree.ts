@@ -5,6 +5,7 @@ import { getChildrenEdges } from "@/core/graph/getChildrenEdges";
 import { getOutgoers } from "@/core/graph/getOutgoers";
 import { parser } from "@/core/json/jsonParser";
 import { useJson } from "@/store//useJson";
+import { EdgeData, NodeData } from "@/core/type";
 
 const initialStates = {
   zoomPanPinch: null as ReactZoomPanPinchRef | null,

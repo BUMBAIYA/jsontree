@@ -2,6 +2,7 @@ import React from "react";
 import { Node, NodeProps } from "reaflow";
 import { TextNode } from "@/core/node/TextNode";
 import { ObjectNode } from "@/core/node/ObjectNode";
+import { NodeData } from "@/core/type";
 
 export interface CustomNodeProps {
   node: NodeData;

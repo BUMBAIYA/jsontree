@@ -3,6 +3,7 @@ import { addEdgeToGraph } from "@/core/addEdgeToGraph";
 import { addNodeToGraph } from "@/core/addNodeToGraph";
 import { traverse } from "@/core/traverse";
 import { getNodePath } from "@/core/json/getNodePath";
+import { EdgeData, NodeData } from "@/core/type";
 
 export type Graph = {
   nodes: NodeData[];
