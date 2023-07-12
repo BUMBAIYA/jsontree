@@ -4,14 +4,12 @@ import { useEffect } from "react";
 import { Montserrat } from "next/font/google";
 import { PageSEO } from "@/components/PageSEO";
 import { classNames } from "@/utility/classNames";
-import { LogoIcon } from "@/components/Icons";
 import { Allotment } from "allotment";
 import MonacoEditor from "@/components/MonacoEditor";
-import EditorInfobar from "@/components/MonacoEditor/EditorInfobar";
+import EditorInfobar from "@/components/EditorInfobar";
 import "allotment/dist/style.css";
 import { useApp } from "@/store/useApp";
 import { JSON_TEMPLATE } from "@/constants/json";
-import { useTree } from "@/store/useTree";
 import Navbar from "@/components/Navbar";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
