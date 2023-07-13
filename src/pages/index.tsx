@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
-import { Montserrat } from "next/font/google";
+import { Fira_Mono, Montserrat } from "next/font/google";
 import { PageSEO } from "@/components/PageSEO";
 import { classNames } from "@/utility/classNames";
 import { Allotment } from "allotment";
@@ -13,6 +13,11 @@ import { JSON_TEMPLATE } from "@/constants/json";
 import Navbar from "@/components/Navbar";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
+
+export const firaMono = Fira_Mono({
+  weight: ["500"],
+  subsets: ["latin"],
+});
 
 const TreeEditor = dynamic(() => import("@/components/TreeEditor"), {
   ssr: false,

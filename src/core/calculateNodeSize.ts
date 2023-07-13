@@ -1,12 +1,7 @@
-import { Fira_Mono } from "next/font/google";
 import { useTree } from "@/store/useTree";
 import { useStored } from "@/store/useStored";
 import { isImageUrl } from "@/utility/checkFormat";
-
-const firaMono = Fira_Mono({
-  weight: ["500"],
-  subsets: ["latin"],
-});
+import { firaMono } from "@/pages";
 
 export const isContentImage = (value: string | [string, string][]) => {
   if (typeof value !== "string") return false;

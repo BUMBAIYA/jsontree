@@ -35,38 +35,26 @@ const Node: FC<CustomNodeProps> = ({ node, x, y, hasCollapse = false }) => {
         <span
           className={classNames(
             "flex h-full w-full items-center justify-center",
+            getKeyColor({ parent: isParent, type: type }),
           )}
-          style={{
-            color: getKeyColor({ parent: isParent, type: type }),
-          }}
         >
           <TextRenderer
-            style={{ fontSize: isParent ? "12px" : "10px" }}
+            classNames={classNames(isParent ? "text-xs" : "text-[10px]")}
             innerText={JSON.stringify(text).replaceAll('"', "")}
           />
         </span>
-        <span className="flex h-full items-center">
+        <span className="flex h-full items-center gap-1">
           {isParent && childrenCount > 0 && showChildrenCount && (
-            <span style={{ fontSize: "12px", paddingInline: "4px" }}>
+            <span className="px-1 text-xs">
               {type === "array" ? `[${childrenCount}]` : `{${childrenCount}}`}
             </span>
           )}
           {isParent && hasCollapse && hideCollapse && (
             <button
-              style={{ marginInline: "4px", pointerEvents: "all" }}
-              className="group h-7 w-7"
+              className="group pointer-events-auto h-7 w-7 rounded-md bg-gray-200 p-1 hover:bg-gray-300"
               onClick={handleExpand}
             >
-              <span
-                style={{
-                  padding: "4px",
-                  backgroundColor: "rgb(229 231 235)",
-                  borderRadius: "0.25rem",
-                }}
-                className="flex h-full w-full items-center justify-center rounded-lg p-2 group-hover:!bg-gray-400"
-              >
-                {isExpanded ? <LinkBreakIcon /> : <LinkIcon />}
-              </span>
+              {isExpanded ? <LinkBreakIcon /> : <LinkIcon />}
             </button>
           )}
         </span>

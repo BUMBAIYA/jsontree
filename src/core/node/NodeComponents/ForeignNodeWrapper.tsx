@@ -1,12 +1,6 @@
 import { ReactNode } from "react";
-import { Fira_Mono } from "next/font/google";
 import { classNames } from "@/utility/classNames";
-
-const robotoMono = Fira_Mono({
-  weight: ["500"],
-  subsets: ["latin"],
-  display: "swap",
-});
+import { firaMono } from "@/pages";
 
 export type ForeignNodeWrapper = {
   width: number | undefined;
@@ -20,7 +14,7 @@ export function ForeignNodeWrapper(props: ForeignNodeWrapper) {
     <foreignObject
       style={{ width: props.width, height: props.height }}
       className={classNames(
-        robotoMono.className,
+        firaMono.className,
         !props.isObject ? "text-center" : "",
         "pointer-events-none overflow-hidden font-medium",
       )}

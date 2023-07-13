@@ -26,6 +26,7 @@ export const CustomNode = (nodeProps: NodeProps) => {
       ry={5}
       {...(data.isEmpty && rootProps)}
       label={<React.Fragment />}
+      className="!fill-[#f6f8fa]"
     >
       {({ node, x, y }) => {
         if (Array.isArray(text)) {

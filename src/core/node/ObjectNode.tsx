@@ -6,6 +6,7 @@ import {
   getKeyColor,
   getValueColor,
 } from "@/core/node/NodeComponents/getColors";
+import { classNames } from "@/utility/classNames";
 
 const Node: FC<CustomNodeProps> = ({ node, x, y }) => {
   const { text, width, height, data } = node;
@@ -21,14 +22,11 @@ const Node: FC<CustomNodeProps> = ({ node, x, y }) => {
                 className="block overflow-hidden text-ellipsis whitespace-nowrap px-2 text-xs"
                 key={idx}
               >
-                <span
-                  style={{ color: getKeyColor({ objectKey: true }) }}
-                  className="inline overflow-hidden text-ellipsis whitespace-nowrap"
-                >
+                <span className="inline overflow-hidden text-ellipsis whitespace-nowrap text-[crimson]">
                   {JSON.stringify(val[0]).replaceAll('"', "")}:{" "}
                 </span>
                 <TextRenderer
-                  style={{ color: getValueColor(JSON.stringify(val[1])) }}
+                  classNames={classNames(getValueColor(JSON.stringify(val[1])))}
                   innerText={JSON.stringify(val[1])}
                 />
               </span>
