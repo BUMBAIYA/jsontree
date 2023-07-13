@@ -23,7 +23,7 @@ const Node: FC<CustomNodeProps> = ({ node, x, y }) => {
               >
                 <span
                   style={{ color: getKeyColor({ objectKey: true }) }}
-                  className="inline overflow-hidden text-ellipsis whitespace-nowrap p-2"
+                  className="inline overflow-hidden text-ellipsis whitespace-nowrap"
                 >
                   {JSON.stringify(val[0]).replaceAll('"', "")}:{" "}
                 </span>

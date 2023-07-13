@@ -1,9 +1,9 @@
-import { DM_Mono } from "next/font/google";
+import { Fira_Mono } from "next/font/google";
 import { useTree } from "@/store/useTree";
 import { useStored } from "@/store/useStored";
 import { isImageUrl } from "@/utility/checkFormat";
 
-const firaMono = DM_Mono({
+const firaMono = Fira_Mono({
   weight: ["500"],
   subsets: ["latin"],
 });

@@ -22,8 +22,7 @@ export function ForeignNodeWrapper(props: ForeignNodeWrapper) {
       className={classNames(
         robotoMono.className,
         !props.isObject ? "text-center" : "",
-        props.isObject ? "p-2" : "",
-        "pointer-events-none overflow-hidden font-medium text-red-500",
+        "pointer-events-none overflow-hidden font-medium",
       )}
     >
       {props.children}
