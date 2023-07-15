@@ -19,7 +19,7 @@ const Node: FC<CustomNodeProps> = ({ node, x, y }) => {
           {text.map((val: any, idx: any) => {
             return (
               <span
-                className="block overflow-hidden text-ellipsis whitespace-nowrap px-2 text-xs"
+                className="block overflow-hidden text-ellipsis whitespace-nowrap px-3 text-xs"
                 key={idx}
               >
                 <span className="inline overflow-hidden text-ellipsis whitespace-nowrap text-[crimson]">

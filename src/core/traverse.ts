@@ -134,9 +134,7 @@ function handleHasChildren(
     if (
       (brothersProps.length > 0 &&
         states.bracketOpen[states.bracketOpen.length - 2]?.type !== "object") ||
-      (brothersProps.length > 0 &&
-        states.bracketOpen.length === 1 &&
-        brothersProps[brothersProps.length - 1].parentId)
+      (brothersProps.length > 0 && states.bracketOpen.length === 1)
     ) {
       addEdgeToGraph(
         graph,
