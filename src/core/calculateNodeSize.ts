@@ -1,7 +1,11 @@
 import { useTree } from "@/store/useTree";
 import { useStored } from "@/store/useStored";
 import { isImageUrl } from "@/utility/checkFormat";
-import { firaMono } from "@/pages";
+
+const CHAR_WIDTH = 7.2 as const;
+const CHAR_HEIGHT = 18 as const;
+const NODE_TOTAL_PADDING = 20 as const;
+const WIDTH_OFFSET = 4 as const;
 
 export const isContentImage = (value: string | [string, string][]) => {
   if (typeof value !== "string") return false;
@@ -16,33 +20,11 @@ const sizeCache = new Map<
   { width: number; height: number }
 >();
 
-const calculateWidthAndHeight = (str: string, single = false) => {
-  if (!str) return { width: 45, height: 45 };
-
-  const dummyElement = document.createElement("div");
-  dummyElement.style.whiteSpace = single ? "nowrap" : "pre-wrap";
-  dummyElement.innerHTML = str;
-  dummyElement.style.fontSize = "12px";
-  dummyElement.style.width = "fit-content";
-  dummyElement.style.height = "fit-content";
-  dummyElement.style.padding = "10px";
-  dummyElement.style.fontWeight = "500";
-  dummyElement.style.overflowWrap = "break-word";
-  dummyElement.style.fontFamily = firaMono.style.fontFamily;
-  document.body.appendChild(dummyElement);
-
-  const width = dummyElement.offsetWidth + 4;
-  const height = dummyElement.offsetHeight;
-  document.body.removeChild(dummyElement);
-
-  return { width, height };
-};
-
 export const calculateNodeSize = (
   text: string | [string, string][],
   isParent = false,
 ) => {
-  let lines = "";
+  let lines: string[] = [];
   const { foldNodes } = useTree.getState();
   const { imagePreview } = useStored.getState();
   const isImage = isContentImage(text) && imagePreview;
@@ -55,14 +37,31 @@ export const calculateNodeSize = (
   }
 
   if (typeof text !== "string") {
-    lines = text
-      .map(([k, v]) => `${k}: ${JSON.stringify(v).slice(0, 80)}`)
-      .join("\n");
+    lines = text.map(([k, v]) => `${k}: ${JSON.stringify(v).slice(0, 80)}`);
   } else {
-    lines = text;
+    lines.push(text);
   }
 
-  let sizes = calculateWidthAndHeight(lines, typeof text === "string");
+  if (!lines) return { width: 45, height: 45 };
+  const calculateWidthAndHeight = () => {
+    let maxLen = 0;
+    let rowCount = 0;
+    for (let x of lines) {
+      if (x.length > maxLen) {
+        maxLen = x.length;
+      }
+      rowCount++;
+    }
+
+    let width = Math.round(
+      CHAR_WIDTH * maxLen + NODE_TOTAL_PADDING + WIDTH_OFFSET,
+    );
+    let height = CHAR_HEIGHT * rowCount + NODE_TOTAL_PADDING;
+
+    return { width, height };
+  };
+
+  let sizes = calculateWidthAndHeight();
   if (isImage) sizes = { width: 80, height: 80 };
   if (foldNodes) sizes.width = 300;
   if (isParent && foldNodes) sizes.width = 170;
