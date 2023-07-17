@@ -11,6 +11,7 @@ import "allotment/dist/style.css";
 import { useApp } from "@/store/useApp";
 import { JSON_TEMPLATE } from "@/constants/json";
 import Navbar from "@/components/Navbar";
+import { useTree } from "@/store/useTree";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -26,6 +27,7 @@ const TreeEditor = dynamic(() => import("@/components/TreeEditor"), {
 export default function Home() {
   const { isReady } = useRouter();
   const setContents = useApp((state) => state.setContents);
+  const fullscreen = useTree((state) => state.fullscreen);
 
   useEffect(() => {
     if (isReady) {
@@ -50,9 +52,9 @@ export default function Home() {
           <Allotment defaultSizes={[100, 300]}>
             <Allotment.Pane
               className="h-full w-full md:w-1/2 lg:w-2/3"
-              minSize={450}
+              minSize={fullscreen ? 0 : 450}
               maxSize={700}
-              visible
+              visible={!fullscreen}
             >
               <MonacoEditor />
             </Allotment.Pane>
