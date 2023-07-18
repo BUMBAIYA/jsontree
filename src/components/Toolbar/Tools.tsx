@@ -16,7 +16,7 @@ export default function Tools() {
   return (
     <div className="flex items-center gap-2">
       <button
-        className="h-8 w-8 rounded-md border border-gray-300 p-[5px] text-gray-700 hover:bg-gray-200"
+        className="hidden h-8 w-8 rounded-md border border-gray-300 p-[5px] text-gray-700 hover:bg-gray-200 md:inline-block"
         type="button"
         aria-label="Zoom In"
         onClick={zoomIn}
@@ -24,7 +24,7 @@ export default function Tools() {
         <ZoomInIcon />
       </button>
       <button
-        className="h-8 w-8 rounded-md border border-gray-300 p-[5px] text-gray-700 hover:bg-gray-200"
+        className="hidden h-8 w-8 rounded-md border border-gray-300 p-[5px] text-gray-700 hover:bg-gray-200 md:inline-block"
         type="button"
         aria-label="Zoom Out"
         onClick={zoomOut}

@@ -12,6 +12,7 @@ import { useApp } from "@/store/useApp";
 import { JSON_TEMPLATE } from "@/constants/json";
 import Navbar from "@/components/Navbar";
 import { useTree } from "@/store/useTree";
+import { useBreakpoint } from "@/hooks/useBreakpoint";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -28,12 +29,19 @@ export default function Home() {
   const { isReady } = useRouter();
   const setContents = useApp((state) => state.setContents);
   const fullscreen = useTree((state) => state.fullscreen);
+  const toggleFullscreen = useTree((state) => state.toggleFullscreen);
+
+  const { isScreenLessThan } = useBreakpoint(768);
 
   useEffect(() => {
     if (isReady) {
       setContents({ contents: JSON_TEMPLATE, hasChanges: false });
     }
   }, [isReady, setContents]);
+
+  useEffect(() => {
+    if (isScreenLessThan) toggleFullscreen(true);
+  }, [isScreenLessThan, toggleFullscreen]);
 
   return (
     <div className="h-screen">
@@ -48,17 +56,25 @@ export default function Home() {
         )}
       >
         <Navbar />
-        <main className="flex h-[calc(100vh-84px)] flex-col md:flex-row">
-          <Allotment defaultSizes={[100, 300]}>
+        <main className="flex h-[calc(100vh-84px)] w-full flex-col md:flex-row">
+          <Allotment
+            className="!relative flex h-[calc(100vh-84px)]"
+            proportionalLayout={false}
+          >
             <Allotment.Pane
-              className="h-full w-full md:w-1/2 lg:w-2/3"
+              className="h-full"
+              preferredSize={isScreenLessThan ? "100%" : 450}
               minSize={fullscreen ? 0 : 450}
-              maxSize={700}
+              maxSize={isScreenLessThan ? Infinity : 700}
               visible={!fullscreen}
             >
               <MonacoEditor />
             </Allotment.Pane>
-            <Allotment.Pane className="relative flex w-full items-center justify-center">
+            <Allotment.Pane
+              minSize={0}
+              maxSize={isScreenLessThan && !fullscreen ? 0 : Infinity}
+              className="flex w-full items-center justify-center"
+            >
               <TreeEditor />
             </Allotment.Pane>
           </Allotment>
