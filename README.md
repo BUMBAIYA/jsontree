@@ -4,7 +4,7 @@ Visualisation tool to help visualise json format in Graph and Tree form.
 
 👉 [View live](https://jsontree.vercel.app/)
 
-![screencapture-jsontree-vercel-app-2023-07-10-04_19_22](https://github.com/BUMBAIYA/jsontree/assets/85615075/570131a8-e7f9-4ba8-9558-1d94ba989d2f)
+![screencapture-jsontree-vercel-app-2023-07-19-04_35_43](https://github.com/BUMBAIYA/jsontree/assets/85615075/0978c0ba-4871-4722-8cf8-f695a86d11ea)
 
 ## Development setup 🛠
 
