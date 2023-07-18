@@ -9,6 +9,7 @@ import {
 import { useTree } from "@/store/useTree";
 import useToggleHide from "@/hooks/useToggleHide";
 import { CustomNode } from "@/core/node";
+import { useElementSize } from "@/hooks/useElementSize";
 
 const Canvas = dynamic(() => import("reaflow").then((r) => r.Canvas));
 
@@ -25,6 +26,8 @@ export default function TreeEditor() {
 
   const [paneWidth, setPaneWidth] = useState(2000);
   const [paneHeight, setPaneHeight] = useState(2000);
+
+  const [editorContainerRef, editorSize] = useElementSize();
 
   const onInit = useCallback(
     (ref: ReactZoomPanPinchRef) => {
@@ -80,9 +83,15 @@ export default function TreeEditor() {
         </div>
       )}
       <div
+        ref={editorContainerRef}
         onContextMenu={(e) => e.preventDefault()}
         className="absolute h-[calc(100vh-84px)] w-full active:!cursor-move"
       >
+        <div className="absolute right-1 top-1 z-20 rounded-md p-1 text-xs">
+          <span>
+            {editorSize.width} X {editorSize.height}
+          </span>
+        </div>
         <TransformWrapper
           maxScale={2}
           minScale={0.05}
