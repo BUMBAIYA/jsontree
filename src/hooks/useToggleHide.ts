@@ -15,17 +15,17 @@ const useToggleHide = () => {
   );
 
   const validateHiddenNodes = useCallback(() => {
-    const hiddenItems = document.body.querySelectorAll(".hidden");
-    hiddenItems.forEach((item) => item.classList.remove("hidden"));
+    const hiddenItems = document.body.querySelectorAll(".hidden-node");
+    hiddenItems.forEach((item) => item.classList.remove("hidden-node"));
 
     if (nodeList.length) {
       const selectedNodes = document.body.querySelectorAll(nodeList.join(","));
-      selectedNodes.forEach((node) => node.classList.add("hidden"));
+      selectedNodes.forEach((node) => node.classList.add("hidden-node"));
     }
 
     if (edgeList.length) {
       const selectedEdges = document.body.querySelectorAll(edgeList.join(","));
-      selectedEdges.forEach((edge) => edge.classList.add("hidden"));
+      selectedEdges.forEach((edge) => edge.classList.add("hidden-node"));
     }
   }, [nodeList, edgeList]);
 
