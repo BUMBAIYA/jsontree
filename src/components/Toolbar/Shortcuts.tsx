@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useMemo } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { getNextDirection } from "@/core/graph/getNextDirection";
 import { useHotkeys } from "@/hooks/useHotKeys";
@@ -13,6 +13,17 @@ export default function Shortcuts() {
   const zoomOut = useTree((state) => state.zoomOut);
   const direction = useTree((state) => state.direction);
   const setDirection = useTree((state) => state.setDirection);
+
+  const modKey = useMemo(() => {
+    if (typeof window !== "undefined") {
+      if (/Mac|iPod|iPhone|iPad/.test(navigator.platform)) {
+        return "⌘";
+      } else {
+        return "CTRL";
+      }
+    }
+    return "";
+  }, []);
 
   const toggleEditor = () => toggleFullscreen(!fullscreen);
 
@@ -63,7 +74,7 @@ export default function Shortcuts() {
                       : "bg-gray-200"
                   }`}
                 >
-                  cltrl+shift+E
+                  {modKey} SHIFT E
                 </kbd>
               </button>
             )}
@@ -84,7 +95,7 @@ export default function Shortcuts() {
                       : "bg-gray-200"
                   }`}
                 >
-                  cltrl+shift+D
+                  {modKey} SHIFT D
                 </kbd>
               </button>
             )}
@@ -105,7 +116,7 @@ export default function Shortcuts() {
                       : "bg-gray-200"
                   }`}
                 >
-                  cltrl+shift+C
+                  {modKey} SHIFT C
                 </kbd>
               </button>
             )}
@@ -126,7 +137,7 @@ export default function Shortcuts() {
                       : "bg-gray-200"
                   }`}
                 >
-                  cltrl+shift++
+                  {modKey} SHIFT +
                 </kbd>
               </button>
             )}
@@ -147,7 +158,7 @@ export default function Shortcuts() {
                       : "bg-gray-200"
                   }`}
                 >
-                  cltrl+shift+-
+                  {modKey} SHIFT -
                 </kbd>
               </button>
             )}
