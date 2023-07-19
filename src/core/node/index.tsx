@@ -16,7 +16,11 @@ const rootProps = {
   ry: 50,
 };
 
-export const CustomNode = (nodeProps: NodeProps) => {
+interface CustomNode extends NodeProps {
+  isLightMode: boolean;
+}
+
+export const CustomNode = (nodeProps: CustomNode) => {
   const { text, data } = nodeProps.properties;
 
   return (
@@ -26,7 +30,9 @@ export const CustomNode = (nodeProps: NodeProps) => {
       ry={5}
       {...(data.isEmpty && rootProps)}
       label={<React.Fragment />}
-      className="!fill-[#f6f8fa]"
+      className={`${
+        nodeProps.isLightMode ? "!fill-[#f6f8fa]" : "!fill-[#2B2C3E]"
+      }`}
     >
       {({ node, x, y }) => {
         if (Array.isArray(text)) {

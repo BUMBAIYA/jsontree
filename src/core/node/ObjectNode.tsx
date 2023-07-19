@@ -22,7 +22,7 @@ const Node: FC<CustomNodeProps> = ({ node, x, y }) => {
                 className="block overflow-hidden text-ellipsis whitespace-nowrap px-3 text-xs"
                 key={idx}
               >
-                <span className="inline overflow-hidden text-ellipsis whitespace-nowrap text-[crimson]">
+                <span className="inline overflow-hidden text-ellipsis whitespace-nowrap text-[crimson] dark:text-[#5eb9eb]">
                   {JSON.stringify(val[0]).replaceAll('"', "")}:{" "}
                 </span>
                 <TextRenderer

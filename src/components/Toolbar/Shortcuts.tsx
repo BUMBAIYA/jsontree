@@ -39,7 +39,10 @@ export default function Shortcuts() {
 
   return (
     <Menu as="div" className="relative">
-      <Menu.Button className="inline-flex h-8 w-8 items-center justify-center gap-1 rounded-md border border-gray-300 p-0 text-sm text-gray-700 hover:bg-gray-200 md:w-auto md:px-2 md:py-1">
+      <Menu.Button
+        className="inline-flex h-8 w-8 items-center justify-center gap-1 rounded-md border border-gray-300 p-0 text-sm text-gray-700 hover:bg-gray-200 dark:border-gray-500 dark:bg-vsdark-500 dark:text-gray-300 dark:hover:border-yellow-400 dark:hover:text-yellow-400 md:w-auto md:px-2 md:py-1"
+        aria-label="Shortcut menu"
+      >
         <span className="hidden md:inline">Shortcuts</span>
         <div className="-mr-1 ml-2 hidden h-4 w-4 md:inline-block">
           <ChevronDownIcon />
@@ -57,12 +60,14 @@ export default function Shortcuts() {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 z-50 mt-2 w-40 origin-top-right divide-y divide-gray-100 rounded-md bg-white p-1 shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none md:w-56">
+        <Menu.Items className="absolute right-0 z-50 mt-2 w-40 origin-top-right divide-y divide-gray-100 rounded-md bg-white p-1 shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none dark:divide-y-0 dark:bg-vsdark-500 dark:shadow-yellow-700/10 dark:ring-1 dark:ring-gray-600 md:w-56">
           <Menu.Item>
             {({ active }) => (
               <button
                 className={`${
-                  active ? "bg-gray-900 text-white" : "text-gray-900"
+                  active
+                    ? "bg-gray-900 text-white dark:text-yellow-400"
+                    : "text-gray-900 dark:text-white"
                 } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                 onClick={toggleEditor}
               >
@@ -71,7 +76,7 @@ export default function Shortcuts() {
                   className={`ml-2 hidden rounded-md border border-gray-200 p-1 text-xs md:inline ${
                     active
                       ? "border-gray-100 bg-yellow-300 text-gray-900"
-                      : "bg-gray-200"
+                      : "bg-gray-200 dark:text-gray-900"
                   }`}
                 >
                   {modKey} SHIFT E
@@ -83,7 +88,9 @@ export default function Shortcuts() {
             {({ active }) => (
               <button
                 className={`${
-                  active ? "bg-gray-900 text-white" : "text-gray-900"
+                  active
+                    ? "bg-gray-900 text-white dark:text-yellow-400"
+                    : "text-gray-900 dark:text-white"
                 } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                 onClick={toggleDirection}
               >
@@ -92,7 +99,7 @@ export default function Shortcuts() {
                   className={`ml-2 hidden rounded-md border border-gray-200 p-1 text-xs md:inline ${
                     active
                       ? "border-gray-100 bg-yellow-300 text-gray-900"
-                      : "bg-gray-200"
+                      : "bg-gray-200 dark:text-gray-900"
                   }`}
                 >
                   {modKey} SHIFT D
@@ -104,7 +111,9 @@ export default function Shortcuts() {
             {({ active }) => (
               <button
                 className={`${
-                  active ? "bg-gray-900 text-white" : "text-gray-900"
+                  active
+                    ? "bg-gray-900 text-white dark:text-yellow-400"
+                    : "text-gray-900 dark:text-white"
                 } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                 onClick={centerView}
               >
@@ -113,7 +122,7 @@ export default function Shortcuts() {
                   className={`ml-2 hidden rounded-md border border-gray-200 p-1 text-xs md:inline ${
                     active
                       ? "border-gray-100 bg-yellow-300 text-gray-900"
-                      : "bg-gray-200"
+                      : "bg-gray-200 dark:text-gray-900"
                   }`}
                 >
                   {modKey} SHIFT C
@@ -125,16 +134,18 @@ export default function Shortcuts() {
             {({ active }) => (
               <button
                 className={`${
-                  active ? "bg-gray-900 text-white" : "text-gray-900"
+                  active
+                    ? "bg-gray-900 text-white dark:text-yellow-400"
+                    : "text-gray-900 dark:text-white"
                 } group hidden w-full items-center rounded-md px-2 py-2 text-sm md:flex`}
                 onClick={zoomIn}
               >
                 Zoom In
                 <kbd
-                  className={`ml-2 rounded-md border border-gray-200 p-1 text-xs ${
+                  className={`ml-2 hidden rounded-md border border-gray-200 p-1 text-xs md:inline ${
                     active
                       ? "border-gray-100 bg-yellow-300 text-gray-900"
-                      : "bg-gray-200"
+                      : "bg-gray-200 dark:text-gray-900"
                   }`}
                 >
                   {modKey} SHIFT +
@@ -146,16 +157,18 @@ export default function Shortcuts() {
             {({ active }) => (
               <button
                 className={`${
-                  active ? "bg-gray-900 text-white" : "text-gray-900"
+                  active
+                    ? "bg-gray-900 text-white dark:text-yellow-400"
+                    : "text-gray-900 dark:text-white"
                 } group hidden w-full items-center rounded-md px-2 py-2 text-sm md:flex`}
                 onClick={zoomOut}
               >
                 Zoom Out
                 <kbd
-                  className={`ml-2 rounded-md border border-gray-200 p-1 text-xs ${
+                  className={`ml-2 hidden rounded-md border border-gray-200 p-1 text-xs md:inline ${
                     active
                       ? "border-gray-100 bg-yellow-300 text-gray-900"
-                      : "bg-gray-200"
+                      : "bg-gray-200 dark:text-gray-900"
                   }`}
                 >
                   {modKey} SHIFT -

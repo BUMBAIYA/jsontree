@@ -7,10 +7,19 @@
 }
 
 .editor-grid-light {
-  background-image: linear-gradient(#ececec 1.5px, transparent 1.5px),
+  background-image: linear-gradient(#ebebeb 2px, transparent 2px),
     linear-gradient(90deg, #ebebeb 2px, transparent 2px),
     linear-gradient(#eeeeee 1px, transparent 1px),
     linear-gradient(90deg, #eeeeee 1px, transparent 1px);
-  background-size: 100px 100px, 100px 100px, 10px 10px, 10px 10px;
+  background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+  background-position: -1.5px -1.5px;
+}
+
+.editor-grid-dark {
+  background-image: linear-gradient(#2a2a2a 2px, transparent 2px),
+    linear-gradient(90deg, #2a2a2a 2px, transparent 2px),
+    linear-gradient(#252525 1px, transparent 1px),
+    linear-gradient(90deg, #252525 1px, transparent 1px);
+  background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
   background-position: -1.5px -1.5px;
 }

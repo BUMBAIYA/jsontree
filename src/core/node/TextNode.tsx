@@ -43,7 +43,7 @@ const Node: FC<CustomNodeProps> = ({ node, x, y, hasCollapse = false }) => {
             innerText={JSON.stringify(text).replaceAll('"', "")}
           />
         </span>
-        <span className="flex h-full items-center gap-1">
+        <span className="flex h-full items-center gap-1 dark:text-gray-300">
           {isParent && childrenCount > 0 && showChildrenCount && (
             <span className="px-1 text-xs">
               {type === "array" ? `[${childrenCount}]` : `{${childrenCount}}`}
@@ -51,7 +51,7 @@ const Node: FC<CustomNodeProps> = ({ node, x, y, hasCollapse = false }) => {
           )}
           {isParent && hasCollapse && hideCollapse && (
             <button
-              className="group pointer-events-auto h-7 w-7 rounded-md bg-gray-200 p-1 hover:bg-gray-300"
+              className="group pointer-events-auto h-7 w-7 rounded-md bg-gray-200 p-1 hover:bg-gray-300 dark:bg-vsdark-500 dark:ring-1 dark:ring-gray-200/10"
               onClick={handleExpand}
             >
               {isExpanded ? <LinkBreakIcon /> : <LinkIcon />}

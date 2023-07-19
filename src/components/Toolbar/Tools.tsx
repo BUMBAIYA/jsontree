@@ -1,11 +1,20 @@
-import { FocusIcon, ZoomInIcon, ZoomOutIcon } from "@/components/Icons";
+import {
+  FocusIcon,
+  MoonIcon,
+  SunIcon,
+  ZoomInIcon,
+  ZoomOutIcon,
+} from "@/components/Icons";
 import { useTree } from "@/store/useTree";
 import { useHotkeys } from "@/hooks/useHotKeys";
+import { useStored } from "@/store/useStored";
 
 export default function Tools() {
   const centerView = useTree((state) => state.centerView);
   const zoomIn = useTree((state) => state.zoomIn);
   const zoomOut = useTree((state) => state.zoomOut);
+  const lightmode = useStored((state) => state.lightmode);
+  const setLightTheme = useStored((state) => state.setLightTheme);
 
   useHotkeys([
     ["mod,shift,+", zoomIn],
@@ -16,7 +25,7 @@ export default function Tools() {
   return (
     <div className="flex items-center gap-2">
       <button
-        className="hidden h-8 w-8 rounded-md border border-gray-300 p-[5px] text-gray-700 hover:bg-gray-200 md:inline-block"
+        className="hidden h-8 w-8 rounded-md border border-gray-300 p-[5px] text-gray-700 hover:bg-gray-200 dark:border-gray-500 dark:bg-vsdark-500 dark:text-gray-300 dark:hover:border-yellow-400 dark:hover:text-yellow-400 md:inline-block"
         type="button"
         aria-label="Zoom In"
         onClick={zoomIn}
@@ -24,7 +33,7 @@ export default function Tools() {
         <ZoomInIcon />
       </button>
       <button
-        className="hidden h-8 w-8 rounded-md border border-gray-300 p-[5px] text-gray-700 hover:bg-gray-200 md:inline-block"
+        className="hidden h-8 w-8 rounded-md border border-gray-300 p-[5px] text-gray-700 hover:bg-gray-200 dark:border-gray-500 dark:bg-vsdark-500 dark:text-gray-300 dark:hover:border-yellow-400 dark:hover:text-yellow-400 md:inline-block"
         type="button"
         aria-label="Zoom Out"
         onClick={zoomOut}
@@ -32,12 +41,20 @@ export default function Tools() {
         <ZoomOutIcon />
       </button>
       <button
-        className="h-8 w-8 rounded-md border border-gray-300 p-[5px] text-gray-700 hover:bg-gray-200"
+        className="h-8 w-8 rounded-md border border-gray-300 p-[5px] text-gray-700 hover:bg-gray-200 dark:border-gray-500 dark:bg-vsdark-500 dark:text-gray-300 dark:hover:border-yellow-400 dark:hover:text-yellow-400"
         type="button"
         aria-label="focus to center"
         onClick={centerView}
       >
         <FocusIcon />
+      </button>
+      <button
+        className="h-8 w-8 rounded-md border border-gray-300 p-[5px] text-gray-700 hover:bg-gray-200 dark:border-gray-500 dark:bg-vsdark-500 dark:text-gray-300 dark:hover:border-yellow-400 dark:hover:text-yellow-400"
+        type="button"
+        aria-label="Toggle theme"
+        onClick={() => setLightTheme(!lightmode)}
+      >
+        {lightmode ? <MoonIcon /> : <SunIcon />}
       </button>
     </div>
   );

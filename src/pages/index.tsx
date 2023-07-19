@@ -13,6 +13,7 @@ import { JSON_TEMPLATE } from "@/constants/json";
 import Navbar from "@/components/Navbar";
 import { useTree } from "@/store/useTree";
 import { useBreakpoint } from "@/hooks/useBreakpoint";
+import { useStored } from "@/store/useStored";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -30,8 +31,17 @@ export default function Home() {
   const setContents = useApp((state) => state.setContents);
   const fullscreen = useTree((state) => state.fullscreen);
   const toggleFullscreen = useTree((state) => state.toggleFullscreen);
+  const lightmode = useStored((state) => state.lightmode);
 
   const { isScreenLessThan } = useBreakpoint(768);
+
+  useEffect(() => {
+    if (lightmode) {
+      document.documentElement.classList.remove("dark");
+    } else {
+      document.documentElement.classList.add("dark");
+    }
+  }, [lightmode]);
 
   useEffect(() => {
     if (isReady) {

@@ -10,6 +10,8 @@ import { useTree } from "@/store/useTree";
 import useToggleHide from "@/hooks/useToggleHide";
 import { CustomNode } from "@/core/node";
 import { useElementSize } from "@/hooks/useElementSize";
+import { useStored } from "@/store/useStored";
+import { classNames } from "@/utility/classNames";
 
 const Canvas = dynamic(() => import("reaflow").then((r) => r.Canvas));
 
@@ -19,6 +21,7 @@ export default function TreeEditor() {
   const setLoading = useTree((state) => state.setLoading);
   const setZoomPanPinch = useTree((state) => state.setZoomPanPinch);
   const centerView = useTree((state) => state.centerView);
+  const lightmode = useStored((state) => state.lightmode);
 
   const direction = useTree((state) => state.direction);
   const nodes = useTree((state) => state.nodes);
@@ -61,9 +64,9 @@ export default function TreeEditor() {
 
   const memoizedNode = useCallback(
     (props: JSX.IntrinsicAttributes & NodeProps<any>) => (
-      <CustomNode {...props} animated={false} />
+      <CustomNode {...props} animated={false} isLightMode={lightmode} />
     ),
-    [],
+    [lightmode],
   );
 
   const memoizedEdge = useCallback(
@@ -76,7 +79,7 @@ export default function TreeEditor() {
   return (
     <>
       {loading && (
-        <div className="pointer-events-none absolute inset-0 left-0 top-0 z-50 flex items-center justify-center bg-white">
+        <div className="pointer-events-none absolute inset-0 left-0 top-0 z-50 flex items-center justify-center bg-white dark:bg-vsdark-500">
           <div className="text-base">
             <span>Building graph...</span>
           </div>
@@ -85,9 +88,12 @@ export default function TreeEditor() {
       <div
         ref={editorContainerRef}
         onContextMenu={(e) => e.preventDefault()}
-        className="editor-grid-light absolute h-[calc(100vh-84px)] w-full active:!cursor-move"
+        className={classNames(
+          "absolute h-[calc(100vh-84px)] w-full active:!cursor-move dark:bg-vsdark-500",
+          lightmode ? "editor-grid-light" : "editor-grid-dark",
+        )}
       >
-        <div className="absolute right-1 top-1 z-20 rounded-md p-1 text-xs">
+        <div className="absolute right-1 top-1 z-20 rounded-md p-1 text-xs dark:text-gray-300">
           <span>
             {editorSize.width} X {editorSize.height}
           </span>

@@ -3,7 +3,13 @@ module.exports = {
   darkMode: "class",
   content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        vsdark: {
+          500: "#1e1e1e",
+        },
+      },
+    },
   },
   plugins: [require("@tailwindcss/forms")],
 };
