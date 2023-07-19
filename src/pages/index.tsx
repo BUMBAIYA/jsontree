@@ -72,7 +72,7 @@ export default function Home() {
             proportionalLayout={false}
           >
             <Allotment.Pane
-              className="h-full"
+              className="h-full bg-white dark:bg-vsdark-500 dark:text-white"
               preferredSize={isScreenLessThan ? "100%" : 450}
               minSize={fullscreen ? 0 : 450}
               maxSize={isScreenLessThan ? Infinity : 700}

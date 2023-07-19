@@ -79,7 +79,7 @@ export default function TreeEditor() {
   return (
     <>
       {loading && (
-        <div className="pointer-events-none absolute inset-0 left-0 top-0 z-50 flex items-center justify-center bg-white dark:bg-vsdark-500">
+        <div className="pointer-events-none absolute inset-0 left-0 top-0 z-50 flex items-center justify-center bg-white dark:bg-vsdark-500 dark:text-white">
           <div className="text-base">
             <span>Building graph...</span>
           </div>
