@@ -85,7 +85,7 @@ export default function TreeEditor() {
       <div
         ref={editorContainerRef}
         onContextMenu={(e) => e.preventDefault()}
-        className="absolute h-[calc(100vh-84px)] w-full active:!cursor-move"
+        className="editor-grid-light absolute h-[calc(100vh-84px)] w-full active:!cursor-move"
       >
         <div className="absolute right-1 top-1 z-20 rounded-md p-1 text-xs">
           <span>

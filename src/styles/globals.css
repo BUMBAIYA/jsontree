@@ -5,3 +5,12 @@
 .hidden-node {
   @apply hidden;
 }
+
+.editor-grid-light {
+  background-image: linear-gradient(#ececec 1.5px, transparent 1.5px),
+    linear-gradient(90deg, #ebebeb 2px, transparent 2px),
+    linear-gradient(#eeeeee 1px, transparent 1px),
+    linear-gradient(90deg, #eeeeee 1px, transparent 1px);
+  background-size: 100px 100px, 100px 100px, 10px 10px, 10px 10px;
+  background-position: -1.5px -1.5px;
+}
