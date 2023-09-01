@@ -4,7 +4,7 @@ export const searchQuery = (param: string) => {
 
 export const cleanupHighlight = () => {
   const nodes = document.querySelectorAll(
-    "foreignObject.searched_node, .highlight_node",
+    "rect.searched_node, .highlight_node",
   );
 
   nodes.forEach((node) => {
@@ -19,7 +19,7 @@ export const highlightMatchedNodes = (
   nodes.forEach((node) => {
     const foreignObject = node.parentElement?.closest("foreignObject");
     if (foreignObject) {
-      foreignObject.classList.add("searched_node");
+      foreignObject.previousElementSibling!.classList.add("searched_node");
     }
   });
 

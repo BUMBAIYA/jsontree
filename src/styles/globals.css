@@ -7,10 +7,7 @@
 }
 
 .searched_node {
-  background: rgba(27, 255, 0, 0.1);
-  border: 2px solid hsl(139, 51.6%, 52.2%);
-  border-radius: 2px;
-  box-sizing: border-box;
+  fill: rgba(27, 255, 0, 0.1) !important;
 }
 
 .highlight_node {
