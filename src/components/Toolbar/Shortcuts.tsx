@@ -11,6 +11,7 @@ import {
   SunIcon,
   ArrowPath,
   DownloadIcon,
+  JsonIcon,
 } from "@/components/Icons";
 import { useStored } from "@/store/useStored";
 import { DownloadImageModal } from "@/components/modals/DownloadImageModal";
@@ -83,9 +84,12 @@ export default function Shortcuts() {
                     active
                       ? "bg-gray-900 text-white dark:text-yellow-400"
                       : "text-gray-900 dark:text-white"
-                  } group hidden w-full items-center rounded-md px-2 py-2 text-sm md:flex md:justify-between`}
+                  } group flex w-full items-center gap-2 rounded-md px-2 py-2 text-sm md:justify-between`}
                   onClick={toggleEditor}
                 >
+                  <div className="h-4 w-4 md:hidden">
+                    <JsonIcon />
+                  </div>
                   Toggle Editor
                   <kbd
                     className={`ml-2 hidden rounded-md border border-gray-200 p-1 text-xs md:inline ${
