@@ -144,10 +144,6 @@ export const useTree = create<Graph & GraphActions>((set, get) => ({
       )
       .map((node) => node.id);
 
-    // const closestParentToRoot = Math.min(...collapsedParents.map(n => +n));
-    // const focusNodeId = `g[id*='node-${closestParentToRoot}']`;
-    // const rootNode = document.querySelector(focusNodeId);
-
     set({
       collapsedParents,
       collapsedNodes,
