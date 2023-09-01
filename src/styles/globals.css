@@ -2,6 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.hidden-node {
+.hide_node {
   @apply hidden;
 }
