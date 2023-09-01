@@ -11,7 +11,7 @@ export function Searchbar() {
       <input
         type="search"
         placeholder="Search Node"
-        className="w-full rounded-md border-none px-0 pr-12 text-xs ring-0 focus:ring-0 dark:bg-zinc-800 dark:text-white"
+        className="w-full rounded-md border-none px-0 pr-12 text-xs ring-0 placeholder:text-zinc-600 focus:ring-0 focus:placeholder:text-zinc-400 dark:bg-zinc-800 dark:text-white dark:placeholder:text-zinc-400 dark:focus:placeholder:text-zinc-500"
         value={searchValue}
         onChange={(e) => setValue(e.currentTarget.value)}
         onKeyDown={getHotkeyHandler([["Enter", skip]])}
