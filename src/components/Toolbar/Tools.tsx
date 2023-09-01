@@ -27,7 +27,7 @@ export default function Tools() {
   ]);
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="hidden items-center gap-2 md:flex">
       <button
         className="h-8 w-8 rounded-md border border-gray-300 p-[5px] text-gray-700 hover:bg-gray-200 dark:border-gray-500 dark:bg-vsdark-500 dark:text-gray-300 dark:hover:border-yellow-400 dark:hover:text-yellow-400"
         type="button"
