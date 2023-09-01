@@ -5,3 +5,14 @@
 .hide_node {
   @apply hidden;
 }
+
+.searched_node {
+  background: rgba(27, 255, 0, 0.1);
+  border: 2px solid hsl(139, 51.6%, 52.2%);
+  border-radius: 2px;
+  box-sizing: border-box;
+}
+
+.highlight_node {
+  background: rgba(255, 214, 0, 0.3);
+}

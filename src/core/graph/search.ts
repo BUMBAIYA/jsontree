@@ -3,10 +3,12 @@ export const searchQuery = (param: string) => {
 };
 
 export const cleanupHighlight = () => {
-  const nodes = document.querySelectorAll("foreignObject.searched, .highlight");
+  const nodes = document.querySelectorAll(
+    "foreignObject.searched_node, .highlight_node",
+  );
 
   nodes.forEach((node) => {
-    node.classList.remove("highlight", "searched");
+    node.classList.remove("highlight_node", "searched_node");
   });
 };
 
@@ -17,9 +19,9 @@ export const highlightMatchedNodes = (
   nodes.forEach((node) => {
     const foreignObject = node.parentElement?.closest("foreignObject");
     if (foreignObject) {
-      foreignObject.classList.add("searched");
+      foreignObject.classList.add("searched_node");
     }
   });
 
-  nodes[selectedNode].classList.add("highlight");
+  nodes[selectedNode].classList.add("highlight_node");
 };

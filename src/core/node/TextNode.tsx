@@ -47,7 +47,12 @@ const Node: FC<CustomNodeProps> = ({ node, x, y, hasCollapse = false }) => {
           </picture>
         </div>
       ) : (
-        <span className="flex h-full items-center justify-between px-1">
+        <span
+          data-x={x}
+          data-y={y}
+          data-key={JSON.stringify(text)}
+          className="flex h-full items-center justify-between px-1"
+        >
           <span
             className={classNames(
               "flex h-full w-full items-center justify-center",

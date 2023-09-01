@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect } from "react";
 
 type HotKey = {
@@ -114,4 +115,18 @@ function shouldFireEvent(
     );
   }
   return true;
+}
+
+export function getHotkeyHandler(hotkeys: HotkeyItem[]) {
+  return (event: React.KeyboardEvent<HTMLElement> | KeyboardEvent) => {
+    const _event = "nativeEvent" in event ? event.nativeEvent : event;
+    hotkeys.forEach(([hotkey, handler, options = { preventDefault: true }]) => {
+      if (getHotkeyMatcher(hotkey)(_event)) {
+        if (options.preventDefault) {
+          event.preventDefault();
+        }
+        handler(_event);
+      }
+    });
+  };
 }
