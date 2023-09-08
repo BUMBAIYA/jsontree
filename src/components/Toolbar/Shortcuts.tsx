@@ -208,29 +208,6 @@ export default function Shortcuts() {
                     active
                       ? "bg-gray-900 text-white dark:text-yellow-400"
                       : "text-gray-900 dark:text-white"
-                  } group hidden w-full items-center justify-between rounded-md px-2 py-2 text-sm md:flex`}
-                  onClick={zoomOut}
-                >
-                  Zoom Out
-                  <kbd
-                    className={`ml-2 hidden rounded-md border border-gray-200 p-1 text-xs md:inline ${
-                      active
-                        ? "border-gray-100 bg-yellow-300 text-gray-900"
-                        : "bg-gray-200 dark:text-gray-900"
-                    }`}
-                  >
-                    {modKey} SHIFT -
-                  </kbd>
-                </button>
-              )}
-            </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <button
-                  className={`${
-                    active
-                      ? "bg-gray-900 text-white dark:text-yellow-400"
-                      : "text-gray-900 dark:text-white"
                   } flex w-full items-center gap-2 rounded-md px-2 py-2 text-left text-sm md:hidden`}
                   onClick={() => setTheme(!theme)}
                 >
