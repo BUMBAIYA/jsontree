@@ -3,7 +3,7 @@ import { calculateNodeSize } from "@/core/calculateNodeSize";
 
 type Props = {
   graph: Graph;
-  text: any;
+  text: [string, string][] | string;
   isEmpty?: boolean;
   type?: "string" | "number" | "boolean" | "object" | "array" | "null";
 };
