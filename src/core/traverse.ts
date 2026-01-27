@@ -71,6 +71,7 @@ function handleHasChildren(
   parentType?: string,
 ) {
   let parentId: string | undefined;
+  let savedParentKey: { name: string; type: string } | null = null;
 
   if (type !== "property" && states.parentName !== "") {
     // add last brothers node and add parent node
@@ -80,7 +81,7 @@ function handleHasChildren(
         (e) =>
           e.parentId === states.brothersParentId &&
           e.objectsFromArrayId ===
-            states.objectsFromArray[states.objectsFromArray.length - 1],
+          states.objectsFromArray[states.objectsFromArray.length - 1],
       );
 
       if (findBrothersNode) {
@@ -122,7 +123,8 @@ function handleHasChildren(
       }
     }
 
-    // Add parent node
+    // Adding parent node (e.g. scripts {n}, authors [n])
+    savedParentKey = { name: states.parentName, type };
     parentId = addNodeToGraph({ graph, type, text: states.parentName });
     states.bracketOpen.push({ id: parentId, type });
     states.parentName = "";
@@ -132,7 +134,7 @@ function handleHasChildren(
       (e) =>
         e.parentId === myParentId &&
         e.objectsFromArrayId ===
-          states.objectsFromArray[states.objectsFromArray.length - 1],
+        states.objectsFromArray[states.objectsFromArray.length - 1],
     );
 
     if (
@@ -187,7 +189,7 @@ function handleHasChildren(
         (e) =>
           e.parentId === states.brothersParentId &&
           e.objectsFromArrayId ===
-            states.objectsFromArray[states.objectsFromArray.length - 1],
+          states.objectsFromArray[states.objectsFromArray.length - 1],
       );
 
       if (findBrothersNode) {
@@ -248,15 +250,58 @@ function handleHasChildren(
 
     if (parentId) {
       const myChildren = graph.edges.filter((edge) => edge.from === parentId);
+      const childrenCount = myChildren.length;
       const parentIndex = graph.nodes.findIndex((node) => node.id === parentId);
 
       graph.nodes = graph.nodes.map((node, index) => {
         if (index === parentIndex) {
-          const childrenCount = myChildren.length;
           return { ...node, data: { ...node.data, childrenCount } };
         }
         return node;
       });
+
+      // Show object/array key and count in the parent (brothers) node: scripts: {3}, authors: [2]
+      // Store target node id so {x} and [x] can be clickable to navigate to that node.
+      // Use the first child of the intermediate node (the actual object/array data), not the intermediate.
+      if (savedParentKey) {
+        const edgeToParent = graph.edges.find((e) => e.to === parentId);
+        const broIndex =
+          edgeToParent?.from != null
+            ? graph.nodes.findIndex((n) => n.id === edgeToParent.from)
+            : -1;
+        if (
+          broIndex !== -1 &&
+          Array.isArray(graph.nodes[broIndex].text)
+        ) {
+          const suffix =
+            savedParentKey.type === "object"
+              ? `{${childrenCount}}`
+              : `[${childrenCount}]`;
+          graph.nodes[broIndex].text.push([
+            savedParentKey.name,
+            suffix,
+          ]);
+          // Our heirarchy: (1) Parent Object -> (2) Intermediate Node -> (3) Actual Data Node
+          // We need to target the actual data node, not the intermediate
+          const firstChildEdge = graph.edges.find((e) => e.from === parentId);
+          const targetNodeId = firstChildEdge?.to ?? parentId;
+          const bro = graph.nodes[broIndex];
+          bro.data = {
+            ...bro.data,
+            objectKeyTargets: {
+              ...(bro.data?.objectKeyTargets || {}),
+              [savedParentKey.name]: targetNodeId,
+            },
+          };
+          const { width, height } = calculateNodeSize(
+            graph.nodes[broIndex].text,
+            false,
+          );
+          graph.nodes[broIndex].width = width;
+          graph.nodes[broIndex].height = height;
+        }
+        savedParentKey = null;
+      }
     }
   }
 }

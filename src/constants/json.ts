@@ -2,6 +2,15 @@ const sampleJson = Object.freeze({
   name: "jsontree",
   version: "0.1.0",
   private: true,
+  authors: [
+    {
+      name: "Amit Chauhan",
+      email: "amitchauhan263871@gmail.com",
+    },
+    {
+      github: "https://github.com/BUMBAIYA",
+    },
+  ],
   scripts: {
     dev: "next dev",
     build: "next build",
