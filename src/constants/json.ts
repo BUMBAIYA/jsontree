@@ -8,7 +8,7 @@ const sampleJson = Object.freeze({
       email: "amitchauhan263871@gmail.com",
     },
     {
-      github: "https://github.com/BUMBAIYA",
+      github: "https://github.com/BUMBAIYA/jsontree",
     },
   ],
   scripts: {
