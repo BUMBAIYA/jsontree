@@ -12,7 +12,7 @@ import {
   ArrowPath,
   DownloadIcon,
   JsonIcon,
-} from "@/components/Icons";
+} from "@/components/icons";
 import { useStored } from "@/store/useStored";
 import { DownloadImageModal } from "@/components/modals/DownloadImageModal";
 

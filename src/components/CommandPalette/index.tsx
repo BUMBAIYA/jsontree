@@ -1,7 +1,7 @@
 import { Fragment, useState } from "react";
 import { useHotkeys } from "@/hooks/useHotKeys";
 import { Transition, Dialog, Combobox } from "@headlessui/react";
-import { LogoIcon, CancelIcon, CommandPaletteIcon } from "@/components/Icons";
+import { LogoIcon, CancelIcon, CommandPaletteIcon } from "@/components/icons";
 
 export default function CommandPalette() {
   const [isOpenModal, setIsOpenModal] = useState(false);

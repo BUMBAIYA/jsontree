@@ -6,7 +6,7 @@ import { ForeignNodeWrapper } from "@/core/node/NodeComponents/ForeignNodeWrappe
 import { TextRenderer } from "@/core/node/TextRenderer";
 import { getKeyColor } from "@/core/node//NodeComponents/getColors";
 import { classNames } from "@/utility/classNames";
-import { LinkBreakIcon, LinkIcon } from "@/components/Icons";
+import { LinkBreakIcon, LinkIcon } from "@/components/icons";
 import { isContentImage } from "@/core/calculateNodeSize";
 
 const Node: FC<CustomNodeProps> = ({ node, x, y, hasCollapse = false }) => {

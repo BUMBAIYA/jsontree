@@ -6,7 +6,7 @@ import {
   SunIcon,
   ZoomInIcon,
   ZoomOutIcon,
-} from "@/components/Icons";
+} from "@/components/icons";
 import { useTree } from "@/store/useTree";
 import { useHotkeys } from "@/hooks/useHotKeys";
 import { useStored } from "@/store/useStored";

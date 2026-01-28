@@ -1,5 +1,5 @@
-import { LogoIcon } from "./Icons";
-import { Toolbar } from "./Toolbar/Toolbar";
+import { LogoIcon } from "@/components/icons";
+import { Toolbar } from "@/components/Toolbar/Toolbar";
 
 export default function Navbar() {
   return (
@@ -9,7 +9,7 @@ export default function Navbar() {
           <LogoIcon />
         </div>
         <h1 className="hidden text-base font-semibold dark:text-white md:inline">
-          Json Tree
+          JsonTree
         </h1>
       </div>
       <Toolbar />

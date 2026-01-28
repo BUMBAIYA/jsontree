@@ -3,7 +3,7 @@ import { Dispatch, Fragment, SetStateAction, useState } from "react";
 import { toPng, toSvg } from "html-to-image";
 import { classNames } from "@/utility/classNames";
 import { useStored } from "@/store/useStored";
-import { CancelIcon } from "@/components/Icons";
+import { CancelIcon } from "@/components/icons";
 
 function downloadURI(uri: string, name: string) {
   var link = document.createElement("a");
