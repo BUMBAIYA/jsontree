@@ -22,6 +22,7 @@ const Node: FC<CustomNodeProps> = ({ node, x, y, hasCollapse = false }) => {
   const expandNodes = useTree((state) => state.expandNodes);
   const collapseNodes = useTree((state) => state.collapseNodes);
   const isExpanded = useTree((state) => state.collapsedParents.includes(id));
+  const hoveredNodeId = useTree((state) => state.hoveredNodeId);
   const imagePreview = useStored((state) => state.imagePreview);
   const isImage = imagePreview && isContentImage(text);
 
@@ -33,7 +34,13 @@ const Node: FC<CustomNodeProps> = ({ node, x, y, hasCollapse = false }) => {
   };
 
   return (
-    <ForeignNodeWrapper width={width} height={height} isObject={false}>
+    <ForeignNodeWrapper
+      width={width}
+      height={height}
+      isObject={false}
+      nodeId={id}
+      isHighlighted={hoveredNodeId === id}
+    >
       {isImage ? (
         <div className="p-[5px]">
           <picture>

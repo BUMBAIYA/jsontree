@@ -21,6 +21,7 @@ const initialStates = {
   collapsedParents: [] as string[],
   selectedNode: {} as NodeData,
   path: "",
+  hoveredNodeId: null as string | null,
 };
 
 export type Graph = typeof initialStates;
@@ -31,6 +32,7 @@ interface GraphActions {
   setDirection: (direction: CanvasDirection) => void;
   setZoomPanPinch: (ref: ReactZoomPanPinchRef) => void;
   setSelectedNode: (nodeData: NodeData) => void;
+  setHoveredNodeId: (nodeId: string | null) => void;
   expandNodes: (nodeId: string) => void;
   expandGraph: () => void;
   collapseNodes: (nodeId: string) => void;
@@ -40,6 +42,7 @@ interface GraphActions {
   zoomIn: () => void;
   zoomOut: () => void;
   centerView: () => void;
+  centerOnNode: (nodeId: string) => void;
   clearGraph: () => void;
 }
 
@@ -47,6 +50,7 @@ export const useTree = create<Graph & GraphActions>((set, get) => ({
   ...initialStates,
   clearGraph: () => set({ nodes: [], edges: [], loading: false }),
   setSelectedNode: (nodeData) => set({ selectedNode: nodeData }),
+  setHoveredNodeId: (nodeId) => set({ hoveredNodeId: nodeId }),
   setGraph: (data, options) => {
     const { nodes, edges } = parser(data ?? useJson.getState().json);
     set({
@@ -57,6 +61,7 @@ export const useTree = create<Graph & GraphActions>((set, get) => ({
       collapsedEdges: [],
       graphCollapsed: false,
       loading: true,
+      hoveredNodeId: null,
       ...options,
     });
   },
@@ -181,6 +186,15 @@ export const useTree = create<Graph & GraphActions>((set, get) => ({
     const zoomPanPinch = get().zoomPanPinch;
     const canvas = document.querySelector(".jsontree-canvas") as HTMLElement;
     if (zoomPanPinch && canvas) zoomPanPinch.zoomToElement(canvas);
+  },
+  centerOnNode: (nodeId) => {
+    const zoomPanPinch = get().zoomPanPinch;
+    const el = document.querySelector(
+      `[data-node-id="${nodeId}"]`,
+    ) as HTMLElement;
+    if (zoomPanPinch && el) zoomPanPinch.zoomToElement(el);
+    const node = get().nodes.find((n) => n.id === nodeId);
+    if (node) get().setSelectedNode(node);
   },
   toggleFold: (foldNodes) => {
     set({ foldNodes });
