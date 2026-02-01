@@ -36,3 +36,6 @@ next-env.d.ts
 
 #editor
 .vscode
+
+# Development
+commit.md
