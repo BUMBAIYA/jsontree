@@ -39,8 +39,8 @@ importers:
         specifier: 13.4.7
         version: 13.4.7(eslint@8.43.0)(typescript@5.1.6)
       html-to-image:
-        specifier: ^1.11.11
-        version: 1.11.13
+        specifier: 1.11.11
+        version: 1.11.11
       jsonc-parser:
         specifier: ^3.2.0
         version: 3.3.1
@@ -1150,8 +1150,8 @@ packages:
   hey-listen@1.0.8:
     resolution: {integrity: sha512-COpmrF2NOg4TBWUJ5UVyaCU2A88wEMkUPK4hNqyCkqHbxT92BbvfjoSozkAIIm6XhicGlJHhFdullInrdhwU8Q==}
 
-  html-to-image@1.11.13:
-    resolution: {integrity: sha512-cuOPoI7WApyhBElTTb9oqsawRvZ0rHhaHwghRLlTuffoD1B2aDemlCruLeZrUIIdvG7gs9xeELEPm6PhuASqrg==}
+  html-to-image@1.11.11:
+    resolution: {integrity: sha512-9gux8QhvjRO/erSnDPv28noDZcPZmYE7e1vFsBLKLlRlKDSqNJYebj6Qz1TGd5lsRV+X+xYyjCKjuZdABinWjA==}
 
   human-signals@4.3.1:
     resolution: {integrity: sha512-nZXjEF2nbo7lIw3mgYjItAfgQXog3OjJogSbKa2CQIIvSGWcKgeJnQlNXip6NglNzYH45nSRiEVimMvYL8DDqQ==}
@@ -3445,7 +3445,7 @@ snapshots:
 
   hey-listen@1.0.8: {}
 
-  html-to-image@1.11.13: {}
+  html-to-image@1.11.11: {}
 
   human-signals@4.3.1: {}
 
