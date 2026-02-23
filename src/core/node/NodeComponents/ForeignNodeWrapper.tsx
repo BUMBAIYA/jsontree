@@ -14,16 +14,26 @@ export type ForeignNodeWrapper = {
 export function ForeignNodeWrapper(props: ForeignNodeWrapper) {
   return (
     <foreignObject
-      style={{ width: props.width, height: props.height }}
+      width={props.width}
+      height={props.height}
+      style={{ overflow: "hidden" }}
       {...(props.nodeId && { "data-node-id": props.nodeId })}
       className={classNames(
         firaMono.className,
         !props.isObject ? "text-center" : "",
-        "pointer-events-none overflow-hidden font-medium",
+        "pointer-events-none font-medium",
         props.isHighlighted ? "bg-[#ffd63427]" : "",
       )}
     >
-      {props.children}
+      <div
+        {...({ xmlns: "http://www.w3.org/1999/xhtml" } as Record<
+          string,
+          string
+        >)}
+        style={{ width: props.width, height: props.height }}
+      >
+        {props.children}
+      </div>
     </foreignObject>
   );
 }
