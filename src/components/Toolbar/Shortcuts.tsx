@@ -16,7 +16,14 @@ import {
 import { useStored } from "@/store/useStored";
 import { DownloadImageModal } from "@/components/modals/DownloadImageModal";
 
-export default function Shortcuts() {
+type ShortcutsProps = {
+  onOpenImportModal: () => void;
+  onOpenStatsModal: () => void;
+  onToggleSchemaMode: () => void;
+};
+
+export default function Shortcuts(props: ShortcutsProps) {
+  const { onOpenImportModal, onOpenStatsModal, onToggleSchemaMode } = props;
   const fullscreen = useTree((state) => state.fullscreen);
   const toggleFullscreen = useTree((state) => state.toggleFullscreen);
   const theme = useStored((state) => state.lightmode);
@@ -50,6 +57,9 @@ export default function Shortcuts() {
   useHotkeys([
     ["mod,shift,E", toggleEditor],
     ["mod,shift,D", toggleDirection],
+    ["mod,shift,I", onOpenImportModal],
+    ["mod,shift,J", onOpenStatsModal],
+    ["mod,shift,S", onToggleSchemaMode],
   ]);
 
   return (
@@ -99,6 +109,84 @@ export default function Shortcuts() {
                     }`}
                   >
                     {modKey} SHIFT E
+                  </kbd>
+                </button>
+              )}
+            </Menu.Item>
+            <Menu.Item>
+              {({ active }) => (
+                <button
+                  className={`${
+                    active
+                      ? "bg-gray-900 text-white dark:text-yellow-400"
+                      : "text-gray-900 dark:text-white"
+                  } group flex w-full items-center gap-2 rounded-md px-2 py-2 text-sm md:justify-between`}
+                  onClick={onOpenStatsModal}
+                >
+                  <div className="h-4 w-4">
+                    <JsonIcon />
+                  </div>
+                  JSON Stats
+                  <kbd
+                    className={`ml-2 hidden rounded-md border border-gray-200 p-1 text-xs md:inline ${
+                      active
+                        ? "border-gray-100 bg-yellow-300 text-gray-900"
+                        : "bg-gray-200 dark:text-gray-900"
+                    }`}
+                  >
+                    {modKey} SHIFT J
+                  </kbd>
+                </button>
+              )}
+            </Menu.Item>
+            <Menu.Item>
+              {({ active }) => (
+                <button
+                  className={`${
+                    active
+                      ? "bg-gray-900 text-white dark:text-yellow-400"
+                      : "text-gray-900 dark:text-white"
+                  } group flex w-full items-center gap-2 rounded-md px-2 py-2 text-sm md:justify-between`}
+                  onClick={onToggleSchemaMode}
+                >
+                  <div className="h-4 w-4">
+                    <JsonIcon />
+                  </div>
+                  Toggle Schema Mode
+                  <kbd
+                    className={`ml-2 hidden rounded-md border border-gray-200 p-1 text-xs md:inline ${
+                      active
+                        ? "border-gray-100 bg-yellow-300 text-gray-900"
+                        : "bg-gray-200 dark:text-gray-900"
+                    }`}
+                  >
+                    {modKey} SHIFT S
+                  </kbd>
+                </button>
+              )}
+            </Menu.Item>
+            <Menu.Item>
+              {({ active }) => (
+                <button
+                  className={`${
+                    active
+                      ? "bg-gray-900 text-white dark:text-yellow-400"
+                      : "text-gray-900 dark:text-white"
+                  } group flex w-full items-center gap-2 rounded-md px-2 py-2 text-sm md:justify-between`}
+                  onClick={onOpenImportModal}
+                >
+                  <div className="h-4 w-4">
+                    <JsonIcon />
+                  </div>
+                  Import package.json
+                  <kbd
+                    className={`ml-2 hidden rounded-md border border-gray-200 p-1 text-xs md:inline ${
+                      active
+                        ? "border-gray-100 bg-yellow-300 text-gray-900"
+                        : "bg-gray-200 dark:text-gray-900"
+                    }`}
+                  >
+                    {modKey} SHIFT I
                   </kbd>
                 </button>
               )}
