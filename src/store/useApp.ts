@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import debounce from "lodash.debounce";
 import { contentToJson } from "@/core/json/jsonAdapter";
+import { inferJsonSchema } from "@/core/json/inferSchema";
 import { useJson } from "@/store/useJson";
 import { useStored } from "@/store/useStored";
 import { JSON_TEMPLATE } from "@/constants/json";
@@ -15,6 +16,7 @@ interface JsonActions {
   getContents: () => string;
   getHasChanges: () => boolean;
   applyPendingTransform: () => Promise<void>;
+  toggleSchemaMode: () => Promise<void>;
   setError: (error: object | null | string) => void;
   setHasChanges: (hasChanges: boolean) => void;
   setContents: (data: SetContents) => void;
@@ -30,6 +32,8 @@ const initialStates = {
   hasChanges: false,
   autoManualMode: false,
   pendingTransform: false,
+  schemaMode: false,
+  schemaSource: "",
 };
 
 export type FileStates = typeof initialStates;
@@ -69,6 +73,8 @@ export const useApp = create<FileStates & JsonActions>()((set, get) => ({
       contents: "",
       autoManualMode: false,
       pendingTransform: false,
+      schemaMode: false,
+      schemaSource: "",
     });
     useJson.getState().clear();
   },
@@ -82,6 +88,42 @@ export const useApp = create<FileStates & JsonActions>()((set, get) => ({
       set({ pendingTransform: false });
     } catch (error: any) {
       set({ error: getErrorMessage(error), pendingTransform: true });
+    }
+  },
+  toggleSchemaMode: async () => {
+    if (get().schemaMode) {
+      const sourceContents = get().schemaSource;
+      set({ schemaMode: false, schemaSource: "" });
+      if (sourceContents) {
+        await get().setContents({
+          contents: sourceContents,
+          hasChanges: true,
+          skipUpdate: false,
+        });
+      }
+      return;
+    }
+
+    try {
+      const originalContents = get().contents;
+      const json = await contentToJson(originalContents);
+      const inferredSchema = inferJsonSchema(json);
+
+      set({
+        schemaMode: true,
+        schemaSource: originalContents,
+      });
+      await get().setContents({
+        contents: JSON.stringify(inferredSchema, null, 2),
+        hasChanges: true,
+        skipUpdate: false,
+      });
+    } catch (error: any) {
+      set({
+        error: getErrorMessage(error),
+        schemaMode: false,
+        schemaSource: "",
+      });
     }
   },
   getContents: () => get().contents,

@@ -9,6 +9,7 @@ import {
 
 export default function EditorInfobar() {
   const error = useApp((state) => state.error);
+  const schemaMode = useApp((state) => state.schemaMode);
   const autoManualMode = useApp((state) => state.autoManualMode);
   const pendingTransform = useApp((state) => state.pendingTransform);
   const applyPendingTransform = useApp((state) => state.applyPendingTransform);
@@ -53,6 +54,11 @@ export default function EditorInfobar() {
           <JsonIcon />
           JSON
         </span>
+        {schemaMode && (
+          <span className="rounded bg-yellow-400 px-2 py-[1px] text-[10px] font-semibold text-zinc-900">
+            Schema mode
+          </span>
+        )}
         <div className="flex w-max space-x-1.5">
           {error ? (
             <>

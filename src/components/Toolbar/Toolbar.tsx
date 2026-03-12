@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { JsonIcon } from "@/components/icons";
 import { ImportPackageJsonModal } from "@/components/modals/ImportPackageJsonModal";
+import { useApp } from "@/store/useApp";
 import Tools from "@/components/Toolbar/Tools";
 import Shortcuts from "./Shortcuts";
 import { Searchbar } from "../Searchbar";
 
 export function Toolbar() {
   const [isImportModalOpen, setIsImportModal] = useState(false);
+  const schemaMode = useApp((state) => state.schemaMode);
+  const toggleSchemaMode = useApp((state) => state.toggleSchemaMode);
   const openImportModal = () => setIsImportModal(true);
 
   return (
@@ -23,8 +26,25 @@ export function Toolbar() {
         </span>
         <span className="hidden sm:inline">Import</span>
       </button>
+      <button
+        type="button"
+        aria-label={
+          schemaMode ? "Switch to data mode" : "Switch to schema mode"
+        }
+        onClick={() => void toggleSchemaMode()}
+        className={`inline-flex h-8 items-center justify-center rounded-md border px-2 py-1 text-sm ${
+          schemaMode
+            ? "border-yellow-400 bg-yellow-400 text-zinc-900"
+            : "border-gray-300 text-gray-700 hover:bg-gray-200 dark:border-gray-500 dark:bg-vsdark-500 dark:text-gray-300 dark:hover:border-yellow-400 dark:hover:text-yellow-400"
+        }`}
+      >
+        {schemaMode ? "Data" : "Schema"}
+      </button>
       <Tools />
-      <Shortcuts onOpenImportModal={openImportModal} />
+      <Shortcuts
+        onOpenImportModal={openImportModal}
+        onToggleSchemaMode={() => void toggleSchemaMode()}
+      />
       <ImportPackageJsonModal
         isOpen={isImportModalOpen}
         setOpen={setIsImportModal}
