@@ -209,6 +209,43 @@ export const useTree = create<Graph & GraphActions>((set, get) => ({
   },
   setLoading: (loading) => set({ loading }),
   expandNodes: (nodeId) => {
+    if (get().largeGraphMode) {
+      const edges = get().edges;
+      const nodes = get().nodes;
+      const directEdges = edges.filter((edge) => edge.from === nodeId);
+      const directNodeIds = directEdges
+        .map((edge) => edge.to)
+        .filter((id): id is string => Boolean(id));
+
+      const collapsedParentsWithoutCurrent = get().collapsedParents.filter(
+        (cp) => cp !== nodeId,
+      );
+      const directParentNodeIds = nodes
+        .filter(
+          (node) => directNodeIds.includes(node.id) && node.data?.isParent,
+        )
+        .map((node) => node.id);
+
+      const collapsedParents = Array.from(
+        new Set(collapsedParentsWithoutCurrent.concat(directParentNodeIds)),
+      );
+      const collapsedNodes = get().collapsedNodes.filter(
+        (id) => !directNodeIds.includes(id),
+      );
+      const directEdgeIds = directEdges.map((edge) => edge.id);
+      const collapsedEdges = get().collapsedEdges.filter(
+        (id) => !directEdgeIds.includes(id),
+      );
+
+      set({
+        collapsedParents,
+        collapsedNodes,
+        collapsedEdges,
+        graphCollapsed: collapsedNodes.length > 0 || collapsedEdges.length > 0,
+      });
+      return;
+    }
+
     const [childrenNodes, matchingNodes] = getOutgoers(
       nodeId,
       get().nodes,
@@ -256,12 +293,21 @@ export const useTree = create<Graph & GraphActions>((set, get) => ({
 
     const nodeIds = childrenNodes.map((node) => node.id);
     const edgeIds = childrenEdges.map((edge) => edge.id);
+    const collapsedParents = Array.from(
+      new Set(get().collapsedParents.concat(nodeId)),
+    );
+    const collapsedNodes = Array.from(
+      new Set(get().collapsedNodes.concat(nodeIds)),
+    );
+    const collapsedEdges = Array.from(
+      new Set(get().collapsedEdges.concat(edgeIds)),
+    );
 
     set({
-      collapsedParents: get().collapsedParents.concat(nodeId),
-      collapsedNodes: get().collapsedNodes.concat(nodeIds),
-      collapsedEdges: get().collapsedEdges.concat(edgeIds),
-      graphCollapsed: !!get().collapsedNodes.concat(nodeIds).length,
+      collapsedParents,
+      collapsedNodes,
+      collapsedEdges,
+      graphCollapsed: collapsedNodes.length > 0 || collapsedEdges.length > 0,
     });
   },
   collapseGraph: () => {
