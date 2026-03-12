@@ -8,6 +8,7 @@ import {
   GraphWorkerRequest,
   GraphWorkerResponse,
 } from "@/core/graph/workerTypes";
+import { getNodePath } from "@/core/json/getNodePath";
 import { parser } from "@/core/json/jsonParser";
 import { useJson } from "@/store/useJson";
 import { EdgeData, NodeData } from "@/core/type";
@@ -96,10 +97,19 @@ export const useTree = create<Graph & GraphActions>((set, get) => ({
       totalNodes: 0,
       loadedEdges: 0,
       totalEdges: 0,
+      selectedNode: {} as NodeData,
+      path: "",
       loading: false,
     });
   },
-  setSelectedNode: (nodeData) => set({ selectedNode: nodeData }),
+  setSelectedNode: (nodeData) =>
+    set((state) => ({
+      selectedNode: nodeData,
+      path:
+        nodeData.path && nodeData.path.length > 0
+          ? nodeData.path
+          : getNodePath(state.nodes, state.edges, nodeData.id),
+    })),
   setHoveredNodeId: (nodeId) => set({ hoveredNodeId: nodeId }),
   setGraph: (data, options) => {
     const graphContent = data ?? useJson.getState().json;
@@ -115,6 +125,8 @@ export const useTree = create<Graph & GraphActions>((set, get) => ({
       totalNodes: 0,
       loadedEdges: 0,
       totalEdges: 0,
+      selectedNode: {} as NodeData,
+      path: "",
       loading: true,
       hoveredNodeId: null,
       ...options,
