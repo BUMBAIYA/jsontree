@@ -9,6 +9,7 @@ import {
 
 export default function EditorInfobar() {
   const error = useApp((state) => state.error);
+  const stats = useApp((state) => state.stats);
   const schemaMode = useApp((state) => state.schemaMode);
   const autoManualMode = useApp((state) => state.autoManualMode);
   const pendingTransform = useApp((state) => state.pendingTransform);
@@ -57,6 +58,11 @@ export default function EditorInfobar() {
         {schemaMode && (
           <span className="rounded bg-yellow-400 px-2 py-[1px] text-[10px] font-semibold text-zinc-900">
             Schema mode
+          </span>
+        )}
+        {stats && (
+          <span className="hidden text-[10px] font-semibold text-zinc-600 dark:text-gray-300 md:inline">
+            Nodes {stats.totalNodes} | Depth {stats.maxDepth}
           </span>
         )}
         <div className="flex w-max space-x-1.5">

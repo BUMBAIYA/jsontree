@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import debounce from "lodash.debounce";
 import { contentToJson } from "@/core/json/jsonAdapter";
+import { getJsonStats, JsonStats } from "@/core/json/getJsonStats";
 import { inferJsonSchema } from "@/core/json/inferSchema";
 import { useJson } from "@/store/useJson";
 import { useStored } from "@/store/useStored";
@@ -32,6 +33,7 @@ const initialStates = {
   hasChanges: false,
   autoManualMode: false,
   pendingTransform: false,
+  stats: null as JsonStats | null,
   schemaMode: false,
   schemaSource: "",
 };
@@ -47,17 +49,18 @@ const getErrorMessage = (error: any) => {
 const syncJsonGraph = async (contents: string) => {
   const json = await contentToJson(contents);
   useJson.getState().setJson(JSON.stringify(json, null, 2));
+  return json;
 };
 
 const debouncedSyncJsonGraph = debounce(
   async (
     contents: string,
-    onSuccess: () => void,
+    onSuccess: (json: unknown) => void,
     onError: (error: any) => void,
   ) => {
     try {
-      await syncJsonGraph(contents);
-      onSuccess();
+      const json = await syncJsonGraph(contents);
+      onSuccess(json);
     } catch (error: any) {
       onError(error);
     }
@@ -73,6 +76,7 @@ export const useApp = create<FileStates & JsonActions>()((set, get) => ({
       contents: "",
       autoManualMode: false,
       pendingTransform: false,
+      stats: null,
       schemaMode: false,
       schemaSource: "",
     });
@@ -84,8 +88,8 @@ export const useApp = create<FileStates & JsonActions>()((set, get) => ({
       debouncedSyncJsonGraph.cancel();
       set({ error: null, pendingTransform: true });
 
-      await syncJsonGraph(nextContents);
-      set({ pendingTransform: false });
+      const json = await syncJsonGraph(nextContents);
+      set({ pendingTransform: false, stats: getJsonStats(json) });
     } catch (error: any) {
       set({ error: getErrorMessage(error), pendingTransform: true });
     }
@@ -151,8 +155,8 @@ export const useApp = create<FileStates & JsonActions>()((set, get) => ({
     if (!skipUpdate) {
       try {
         debouncedSyncJsonGraph.cancel();
-        await syncJsonGraph(nextContents);
-        set({ pendingTransform: false });
+        const json = await syncJsonGraph(nextContents);
+        set({ pendingTransform: false, stats: getJsonStats(json) });
       } catch (error: any) {
         set({
           error: getErrorMessage(error),
@@ -164,7 +168,11 @@ export const useApp = create<FileStates & JsonActions>()((set, get) => ({
 
     debouncedSyncJsonGraph(
       nextContents,
-      () => set({ pendingTransform: false }),
+      (json) =>
+        set({
+          pendingTransform: false,
+          stats: getJsonStats(json),
+        }),
       (error: any) =>
         set({
           error: getErrorMessage(error),
