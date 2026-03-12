@@ -44,8 +44,15 @@ export const useApp = create<FileStates & JsonActions>()((set, get) => ({
   getHasChanges: () => get().hasChanges,
   setContents: async ({ contents, hasChanges = true, skipUpdate = false }) => {
     try {
-      set({ ...(contents && { contents }), error: null, hasChanges });
-      const json = await contentToJson(get().contents);
+      const hasContentsUpdate = contents !== undefined;
+      const nextContents = hasContentsUpdate ? contents : get().contents;
+
+      set({
+        ...(hasContentsUpdate ? { contents } : {}),
+        error: null,
+        hasChanges,
+      });
+      const json = await contentToJson(nextContents);
       if (!useStored.getState().liveTransform && skipUpdate) return;
 
       debouncedUpdateJson(json);

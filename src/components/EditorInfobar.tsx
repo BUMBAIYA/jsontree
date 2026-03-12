@@ -21,6 +21,7 @@ export default function EditorInfobar() {
         <a
           href="https://github.com/BUMBAIYA/jsontree"
           target="_blank"
+          rel="noopener noreferrer"
           className="flex items-center space-x-1.5 hover:underline dark:text-white"
         >
           <span className="flex h-3.5 w-3.5">
