@@ -9,6 +9,10 @@ import {
 
 export default function EditorInfobar() {
   const error = useApp((state) => state.error);
+  const autoManualMode = useApp((state) => state.autoManualMode);
+  const pendingTransform = useApp((state) => state.pendingTransform);
+  const applyPendingTransform = useApp((state) => state.applyPendingTransform);
+
   return (
     <div className="flex h-7 w-full items-center justify-between gap-4 border-t border-zinc-300 bg-white px-2 text-xs dark:border-zinc-700 dark:bg-vsdark-500 md:px-4">
       <div className="flex items-center space-x-4">
@@ -30,7 +34,21 @@ export default function EditorInfobar() {
           Github
         </a>
       </div>
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-2 md:space-x-4">
+        {autoManualMode && (
+          <span className="hidden text-[10px] font-semibold text-yellow-700 dark:text-yellow-400 md:inline">
+            Large JSON mode
+          </span>
+        )}
+        {pendingTransform && (
+          <button
+            type="button"
+            onClick={() => void applyPendingTransform()}
+            className="rounded bg-yellow-400 px-2 py-[1px] font-semibold text-zinc-900 hover:bg-yellow-300"
+          >
+            Update graph
+          </button>
+        )}
         <span className="hidden h-4 items-center gap-1 dark:text-white sm:flex">
           <JsonIcon />
           JSON
