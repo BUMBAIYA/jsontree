@@ -10,10 +10,9 @@ export type ImportJsonUrlModalProps = {
 };
 
 const examples = [
-  "https://raw.githubusercontent.com/.../data.json",
-  "https://github.com/vercel/next.js",
-  "react",
-  "https://www.npmjs.com/package/zustand",
+  "https://jsonplaceholder.typicode.com/users/1",
+  "https://raw.githubusercontent.com/…/main/data.json",
+  "https://registry.npmjs.org/zod/latest",
 ];
 
 export function ImportJsonUrlModal(props: ImportJsonUrlModalProps) {
@@ -38,9 +37,7 @@ export function ImportJsonUrlModal(props: ImportJsonUrlModalProps) {
   const handleImport = async () => {
     const value = source.trim();
     if (!value) {
-      setError(
-        "Enter a JSON URL, a GitHub repo or file URL, an npm URL or package name.",
-      );
+      setError("Paste a full https URL that returns JSON.");
       return;
     }
 
@@ -112,11 +109,13 @@ export function ImportJsonUrlModal(props: ImportJsonUrlModalProps) {
                     htmlFor="import-json-url"
                     className="block text-sm font-medium dark:text-gray-200"
                   >
-                    JSON URL, GitHub repo, npm URL, or package name
+                    HTTPS URL (must return JSON)
                   </label>
                   <input
                     id="import-json-url"
-                    type="text"
+                    type="url"
+                    inputMode="url"
+                    autoComplete="url"
                     value={source}
                     onChange={(event) => setSource(event.target.value)}
                     onKeyDown={(event) => {
@@ -125,25 +124,25 @@ export function ImportJsonUrlModal(props: ImportJsonUrlModalProps) {
                         void handleImport();
                       }
                     }}
-                    placeholder="https://…/file.json or https://github.com/org/repo or zustand"
+                    placeholder="https://…"
                     className="mt-2 block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-yellow-400 dark:bg-vsdark-500 dark:text-gray-200 dark:ring-0 dark:focus:ring-1 sm:text-sm sm:leading-6"
                     autoFocus
                   />
                 </div>
 
                 <p className="mt-2 text-xs text-gray-600 dark:text-gray-400">
-                  Loads in your browser. Direct URLs must allow CORS. GitHub
-                  shortcuts use{" "}
+                  Fetches in your browser from the URL you provide. If you use a
+                  normal GitHub file page, use a{" "}
+                  <span className="font-mono">blob</span> or{" "}
+                  <span className="font-mono">tree</span> link to that file, or
+                  paste the{" "}
                   <span className="font-mono">raw.githubusercontent.com</span>{" "}
-                  (public repos). Repo paths default to{" "}
-                  <span className="font-mono">package.json</span> unless the URL
-                  points at another <span className="font-mono">.json</span>{" "}
-                  file.
+                  link. The host must allow CORS.
                 </p>
 
                 <div className="mt-3 rounded-md bg-gray-100 px-3 py-2 text-xs text-gray-700 dark:bg-zinc-700 dark:text-gray-200">
                   <span className="font-semibold">Examples:</span>{" "}
-                  {examples.join(" | ")}
+                  {examples.join(" · ")}
                 </div>
 
                 {error && (
