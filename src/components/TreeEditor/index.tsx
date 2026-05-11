@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Edge, EdgeProps, ElkRoot, NodeProps } from "reaflow";
 import {
   ReactZoomPanPinchRef,
@@ -7,7 +7,6 @@ import {
   TransformWrapper,
 } from "react-zoom-pan-pinch";
 import { useTree } from "@/store/useTree";
-import useToggleHide from "@/hooks/useToggleHide";
 import { CustomNode } from "@/core/node";
 import { useElementSize } from "@/hooks/useElementSize";
 import { useStored } from "@/store/useStored";
@@ -16,20 +15,38 @@ const Canvas = dynamic(() => import("reaflow").then((r) => r.Canvas));
 
 export default function TreeEditor() {
   const loading = useTree((state) => state.loading);
-  const { validateHiddenNodes } = useToggleHide();
-  const setLoading = useTree((state) => state.setLoading);
+  const loadedNodes = useTree((state) => state.loadedNodes);
+  const totalNodes = useTree((state) => state.totalNodes);
   const setZoomPanPinch = useTree((state) => state.setZoomPanPinch);
-  const centerView = useTree((state) => state.centerView);
   const lightmode = useStored((state) => state.lightmode);
 
   const direction = useTree((state) => state.direction);
   const nodes = useTree((state) => state.nodes);
   const edges = useTree((state) => state.edges);
+  const collapsedNodes = useTree((state) => state.collapsedNodes);
+  const collapsedEdges = useTree((state) => state.collapsedEdges);
 
   const [paneWidth, setPaneWidth] = useState(2000);
   const [paneHeight, setPaneHeight] = useState(2000);
 
   const [editorContainerRef, editorSize] = useElementSize();
+
+  const renderNodes = useMemo(() => {
+    const hiddenNodeIds = new Set(collapsedNodes);
+    return nodes.filter((node) => !hiddenNodeIds.has(node.id));
+  }, [collapsedNodes, nodes]);
+
+  const renderEdges = useMemo(() => {
+    const hiddenNodeIds = new Set(collapsedNodes);
+    const hiddenEdgeIds = new Set(collapsedEdges);
+
+    return edges.filter((edge) => {
+      if (hiddenEdgeIds.has(edge.id)) return false;
+      if (edge.from && hiddenNodeIds.has(edge.from)) return false;
+      if (edge.to && hiddenNodeIds.has(edge.to)) return false;
+      return true;
+    });
+  }, [collapsedEdges, collapsedNodes, edges]);
 
   const onInit = useCallback(
     (ref: ReactZoomPanPinchRef) => {
@@ -38,28 +55,12 @@ export default function TreeEditor() {
     [setZoomPanPinch],
   );
 
-  const onLayoutChange = useCallback(
-    (layout: ElkRoot) => {
-      if (layout.width && layout.height) {
-        const areaSize = layout.width * layout.height;
-        const changeRatio = Math.abs(
-          (areaSize * 100) / (paneWidth * paneHeight) - 100,
-        );
-
-        setPaneWidth(layout.width + 50);
-        setPaneHeight((layout.height as number) + 50);
-
-        setTimeout(() => {
-          setLoading(false);
-          validateHiddenNodes();
-          window.requestAnimationFrame(() => {
-            if (changeRatio > 70 || false) centerView();
-          });
-        });
-      }
-    },
-    [centerView, paneHeight, paneWidth, setLoading, validateHiddenNodes],
-  );
+  const onLayoutChange = useCallback((layout: ElkRoot) => {
+    if (layout.width && layout.height) {
+      setPaneWidth(layout.width + 50);
+      setPaneHeight((layout.height as number) + 50);
+    }
+  }, []);
 
   const memoizedNode = useCallback(
     (props: JSX.IntrinsicAttributes & NodeProps<any>) => (
@@ -78,9 +79,14 @@ export default function TreeEditor() {
   return (
     <>
       {loading && (
-        <div className="pointer-events-none absolute inset-0 left-0 top-0 z-50 flex items-center justify-center bg-white dark:bg-vsdark-500 dark:text-white">
-          <div className="text-base">
-            <span>Building graph...</span>
+        <div className="bg-white/85 pointer-events-none absolute right-2 top-2 z-50 rounded-md px-3 py-1.5 text-xs font-medium text-zinc-700 shadow-sm dark:bg-vsdark-500/90 dark:text-gray-200">
+          <div className="flex items-center gap-2">
+            <span>Building graph</span>
+            {totalNodes > 0 && (
+              <span className="font-semibold text-yellow-700 dark:text-yellow-400">
+                {loadedNodes}/{totalNodes}
+              </span>
+            )}
           </div>
         </div>
       )}
@@ -116,13 +122,13 @@ export default function TreeEditor() {
               width: "100%",
               height: "100%",
               overflow: "hidden",
-              display: loading ? "none" : "block",
+              display: "block",
             }}
           >
             <Canvas
               className="jsontree-canvas"
-              nodes={nodes}
-              edges={edges}
+              nodes={renderNodes}
+              edges={renderEdges}
               maxHeight={paneHeight}
               maxWidth={paneWidth}
               height={paneHeight}

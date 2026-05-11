@@ -3,6 +3,7 @@ import { Node, NodeProps } from "reaflow";
 import { TextNode } from "@/core/node/TextNode";
 import { ObjectNode } from "@/core/node/ObjectNode";
 import { NodeData } from "@/core/type";
+import { useTree } from "@/store/useTree";
 
 export interface CustomNodeProps {
   node: NodeData;
@@ -22,6 +23,7 @@ interface CustomNode extends NodeProps {
 
 export const CustomNode = (nodeProps: CustomNode) => {
   const { text, data } = nodeProps.properties;
+  const setSelectedNode = useTree((state) => state.setSelectedNode);
 
   return (
     <Node
@@ -30,6 +32,7 @@ export const CustomNode = (nodeProps: CustomNode) => {
       ry={5}
       {...(data.isEmpty && rootProps)}
       label={<React.Fragment />}
+      onClick={(_, selectedNode) => setSelectedNode(selectedNode as NodeData)}
       className={`${
         nodeProps.isLightMode ? "!fill-[#f6f8fa]" : "!fill-[#2B2C3E]"
       }`}

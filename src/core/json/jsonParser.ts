@@ -27,6 +27,8 @@ export type States = {
   graph: Graph;
 };
 
+const PATH_COMPUTATION_THRESHOLD = 600;
+
 function initializeStates(): States {
   return {
     parentName: "",
@@ -72,10 +74,17 @@ export function parser(jsonStr: string): Graph {
       }
     }
 
-    states.graph.nodes = states.graph.nodes.map((node) => ({
-      ...node,
-      path: getNodePath(states.graph.nodes, states.graph.edges, node.id),
-    }));
+    if (states.graph.nodes.length <= PATH_COMPUTATION_THRESHOLD) {
+      states.graph.nodes = states.graph.nodes.map((node) => ({
+        ...node,
+        path: getNodePath(states.graph.nodes, states.graph.edges, node.id),
+      }));
+    } else {
+      states.graph.nodes = states.graph.nodes.map((node) => ({
+        ...node,
+        path: "",
+      }));
+    }
 
     return states.graph;
   } catch (error) {
