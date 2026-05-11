@@ -178,7 +178,7 @@ export default function Shortcuts(props: ShortcutsProps) {
                   <div className="h-4 w-4">
                     <JsonIcon />
                   </div>
-                  Import package.json
+                  Import JSON from URL
                   <kbd
                     className={`ml-2 hidden rounded-md border border-gray-200 p-1 text-xs md:inline ${
                       active

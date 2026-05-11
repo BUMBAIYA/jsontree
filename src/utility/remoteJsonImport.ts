@@ -1,11 +1,9 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-
 type GithubSource = {
   type: "github";
   owner: string;
   repo: string;
   ref?: string;
-  packagePath: string;
+  jsonPath: string;
   identifier: string;
 };
 
@@ -15,17 +13,18 @@ type NpmSource = {
   identifier: string;
 };
 
-type Source = GithubSource | NpmSource;
-
-type SuccessResponse = {
-  source: "github" | "npm";
+type DirectUrlSource = {
+  type: "direct";
+  url: string;
   identifier: string;
-  pretty: string;
 };
 
-const DEFAULT_GITHUB_HEADERS: Record<string, string> = {
-  Accept: "application/vnd.github+json",
-  "User-Agent": "jsontree-importer",
+type Source = GithubSource | NpmSource | DirectUrlSource;
+
+export type RemoteJsonImportResult = {
+  source: "github" | "npm" | "direct";
+  identifier: string;
+  pretty: string;
 };
 
 const BLOCKED_GITHUB_SEGMENTS = new Set([
@@ -52,9 +51,11 @@ function normalizeGithubRepo(value: string) {
   return value.replace(/\.git$/i, "");
 }
 
-function buildPackagePath(basePath: string[]) {
+/** Resolves a GitHub repo/tree/blob path to a JSON file path (defaults to package.json for folders). */
+function buildJsonPath(basePath: string[]) {
   if (basePath.length === 0) return "package.json";
-  if (basePath[basePath.length - 1] === "package.json") {
+  const last = basePath[basePath.length - 1];
+  if (last.endsWith(".json")) {
     return basePath.join("/");
   }
   return `${basePath.join("/")}/package.json`;
@@ -96,7 +97,7 @@ function parseGithubFromUrl(url: URL): GithubSource {
     owner,
     repo,
     ref,
-    packagePath: buildPackagePath(basePath),
+    jsonPath: buildJsonPath(basePath),
     identifier: `${owner}/${repo}`,
   };
 }
@@ -136,7 +137,7 @@ function parseGithubShorthand(value: string): GithubSource | null {
     type: "github",
     owner: match[1],
     repo: normalizeGithubRepo(match[2]),
-    packagePath: "package.json",
+    jsonPath: "package.json",
     identifier: `${match[1]}/${normalizeGithubRepo(match[2])}`,
   };
 }
@@ -162,7 +163,11 @@ function resolveSource(rawValue: string): Source {
     if (host === "npmjs.com" || host === "www.npmjs.com") {
       return parseNpmFromUrl(url);
     }
-    throw new Error("Unsupported domain. Use github.com or npmjs.com.");
+    return {
+      type: "direct",
+      url: value,
+      identifier: value,
+    };
   }
 
   const githubSource = parseGithubShorthand(value);
@@ -175,100 +180,96 @@ function resolveSource(rawValue: string): Source {
   };
 }
 
-async function fetchGithubPackageJson(source: GithubSource): Promise<object> {
-  const encodedPath = source.packagePath
+function githubRawContentUrl(source: GithubSource): string {
+  const ref = source.ref || "HEAD";
+  const pathSegments = source.jsonPath
     .split("/")
     .map((segment) => encodeURIComponent(segment))
     .join("/");
-  const endpoint = new URL(
-    `https://api.github.com/repos/${encodeURIComponent(
-      source.owner,
-    )}/${encodeURIComponent(source.repo)}/contents/${encodedPath}`,
-  );
-  if (source.ref) {
-    endpoint.searchParams.set("ref", source.ref);
-  }
+  return `https://raw.githubusercontent.com/${encodeURIComponent(
+    source.owner,
+  )}/${encodeURIComponent(source.repo)}/${encodeURIComponent(
+    ref,
+  )}/${pathSegments}`;
+}
 
-  const headers: Record<string, string> = { ...DEFAULT_GITHUB_HEADERS };
-  const token =
-    process.env.GITHUB_TOKEN ||
-    process.env.GH_TOKEN ||
-    process.env.GITHUB_PAT ||
-    "";
-  if (token) {
-    headers.Authorization = `Bearer ${token}`;
-  }
-
-  const response = await fetch(endpoint.toString(), {
-    headers,
-  });
-
-  if (!response.ok) {
-    const payload = await response.json().catch(() => ({}));
+async function fetchText(url: string, init?: RequestInit): Promise<string> {
+  let response: Response;
+  try {
+    response = await fetch(url, {
+      mode: "cors",
+      ...init,
+    });
+  } catch (e: unknown) {
     const message =
-      payload?.message ||
-      `GitHub request failed with status ${String(response.status)}`;
+      e instanceof TypeError
+        ? "Network error or blocked by CORS. Try a URL that allows browser access (for example raw.githubusercontent.com or a public API with CORS)."
+        : "Request failed.";
     throw new Error(message);
   }
 
-  const payload = await response.json();
-  const encodedContent = payload?.content;
-  if (!encodedContent || payload?.encoding !== "base64") {
-    throw new Error("package.json not found in the provided GitHub source");
+  if (!response.ok) {
+    throw new Error(
+      `Request failed (${String(response.status)} ${response.statusText}).`,
+    );
   }
 
-  const rawContent = Buffer.from(encodedContent, "base64").toString("utf8");
-  return JSON.parse(rawContent);
+  return response.text();
 }
 
-async function fetchNpmPackageJson(source: NpmSource): Promise<object> {
+function parseJsonPretty(text: string, context: string): object {
+  const trimmed = text.trim();
+  if (!trimmed) {
+    throw new Error(`${context}: empty response`);
+  }
+  try {
+    return JSON.parse(trimmed) as object;
+  } catch {
+    throw new Error(`${context}: response is not valid JSON`);
+  }
+}
+
+async function fetchGithubJson(source: GithubSource): Promise<object> {
+  const url = githubRawContentUrl(source);
+  const text = await fetchText(url, {
+    headers: { Accept: "application/json, text/plain, */*" },
+  });
+  return parseJsonPretty(text, "GitHub");
+}
+
+async function fetchNpmJson(source: NpmSource): Promise<object> {
   const endpoint = `https://registry.npmjs.org/${encodeURIComponent(
     source.packageName,
   )}/latest`;
-  const response = await fetch(endpoint, {
+  const text = await fetchText(endpoint, {
     headers: {
       Accept: "application/json",
-      "User-Agent": "jsontree-importer",
     },
   });
-
-  if (!response.ok) {
-    const payload = await response.json().catch(() => ({}));
-    const message =
-      payload?.error ||
-      `npm request failed with status ${String(response.status)}`;
-    throw new Error(message);
-  }
-
-  return response.json();
+  return parseJsonPretty(text, "npm");
 }
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<SuccessResponse | { error: string }>,
-) {
-  if (req.method !== "POST") {
-    res.setHeader("Allow", "POST");
-    return res.status(405).json({ error: "Method not allowed" });
-  }
+async function fetchDirectJson(source: DirectUrlSource): Promise<object> {
+  const text = await fetchText(source.url, {
+    headers: { Accept: "application/json, text/plain, */*" },
+  });
+  return parseJsonPretty(text, "URL");
+}
 
-  try {
-    const sourceInput =
-      typeof req.body?.source === "string" ? req.body.source : "";
-    const source = resolveSource(sourceInput);
+export async function importRemoteJson(
+  rawInput: string,
+): Promise<RemoteJsonImportResult> {
+  const source = resolveSource(rawInput);
+  const data =
+    source.type === "github"
+      ? await fetchGithubJson(source)
+      : source.type === "npm"
+      ? await fetchNpmJson(source)
+      : await fetchDirectJson(source);
 
-    const packageJson =
-      source.type === "github"
-        ? await fetchGithubPackageJson(source)
-        : await fetchNpmPackageJson(source);
-
-    return res.status(200).json({
-      source: source.type,
-      identifier: source.identifier,
-      pretty: JSON.stringify(packageJson, null, 2),
-    });
-  } catch (error: any) {
-    const message = error?.message || "Failed to import package.json";
-    return res.status(400).json({ error: message });
-  }
+  return {
+    source: source.type,
+    identifier: source.identifier,
+    pretty: JSON.stringify(data, null, 2),
+  };
 }

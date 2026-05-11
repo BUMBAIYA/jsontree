@@ -2,30 +2,21 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Dispatch, Fragment, SetStateAction, useMemo, useState } from "react";
 import { CancelIcon } from "@/components/icons";
 import { useApp } from "@/store/useApp";
+import { importRemoteJson } from "@/utility/remoteJsonImport";
 
-type ImportResponse = {
-  source: "github" | "npm";
-  identifier: string;
-  pretty: string;
-};
-
-type ImportErrorResponse = {
-  error?: string;
-};
-
-export type ImportPackageJsonModalProps = {
+export type ImportJsonUrlModalProps = {
   isOpen: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 };
 
 const examples = [
+  "https://raw.githubusercontent.com/.../data.json",
   "https://github.com/vercel/next.js",
-  "https://github.com/facebook/react/tree/main/packages/react",
   "react",
   "https://www.npmjs.com/package/zustand",
 ];
 
-export function ImportPackageJsonModal(props: ImportPackageJsonModalProps) {
+export function ImportJsonUrlModal(props: ImportJsonUrlModalProps) {
   const { isOpen, setOpen } = props;
   const setContents = useApp((state) => state.setContents);
 
@@ -47,7 +38,9 @@ export function ImportPackageJsonModal(props: ImportPackageJsonModalProps) {
   const handleImport = async () => {
     const value = source.trim();
     if (!value) {
-      setError("Provide a GitHub URL, npm URL, or package name.");
+      setError(
+        "Enter a JSON URL, a GitHub repo or file URL, an npm URL or package name.",
+      );
       return;
     }
 
@@ -55,24 +48,7 @@ export function ImportPackageJsonModal(props: ImportPackageJsonModalProps) {
     setError("");
 
     try {
-      const response = await fetch("/api/import-package-json", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ source: value }),
-      });
-
-      const data = (await response.json()) as
-        | ImportResponse
-        | ImportErrorResponse;
-
-      if (!response.ok) {
-        const errorResponse = data as ImportErrorResponse;
-        throw new Error(errorResponse.error || "Failed to import package.json");
-      }
-
-      const payload = data as ImportResponse;
+      const payload = await importRemoteJson(value);
       await setContents({
         contents: payload.pretty,
         hasChanges: true,
@@ -80,8 +56,12 @@ export function ImportPackageJsonModal(props: ImportPackageJsonModalProps) {
       });
 
       handleClose();
-    } catch (requestError: any) {
-      setError(requestError?.message || "Failed to import package.json");
+    } catch (requestError: unknown) {
+      const message =
+        requestError instanceof Error
+          ? requestError.message
+          : "Failed to import JSON.";
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -116,7 +96,7 @@ export function ImportPackageJsonModal(props: ImportPackageJsonModalProps) {
               <Dialog.Panel className="w-full max-w-xl rounded-lg bg-white p-4 ring-1 ring-gray-500/20 dark:bg-zinc-800 dark:text-gray-300 dark:ring-gray-100/20">
                 <div className="flex items-center justify-between">
                   <span className="font-semibold dark:text-gray-200">
-                    Import package.json
+                    Import JSON from URL
                   </span>
                   <button
                     type="button"
@@ -129,13 +109,13 @@ export function ImportPackageJsonModal(props: ImportPackageJsonModalProps) {
 
                 <div className="mt-4">
                   <label
-                    htmlFor="import-source"
+                    htmlFor="import-json-url"
                     className="block text-sm font-medium dark:text-gray-200"
                   >
-                    GitHub URL, npm URL, or npm package
+                    JSON URL, GitHub repo, npm URL, or package name
                   </label>
                   <input
-                    id="import-source"
+                    id="import-json-url"
                     type="text"
                     value={source}
                     onChange={(event) => setSource(event.target.value)}
@@ -145,11 +125,21 @@ export function ImportPackageJsonModal(props: ImportPackageJsonModalProps) {
                         void handleImport();
                       }
                     }}
-                    placeholder="https://github.com/vercel/next.js or react"
+                    placeholder="https://…/file.json or https://github.com/org/repo or zustand"
                     className="mt-2 block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-yellow-400 dark:bg-vsdark-500 dark:text-gray-200 dark:ring-0 dark:focus:ring-1 sm:text-sm sm:leading-6"
                     autoFocus
                   />
                 </div>
+
+                <p className="mt-2 text-xs text-gray-600 dark:text-gray-400">
+                  Loads in your browser. Direct URLs must allow CORS. GitHub
+                  shortcuts use{" "}
+                  <span className="font-mono">raw.githubusercontent.com</span>{" "}
+                  (public repos). Repo paths default to{" "}
+                  <span className="font-mono">package.json</span> unless the URL
+                  points at another <span className="font-mono">.json</span>{" "}
+                  file.
+                </p>
 
                 <div className="mt-3 rounded-md bg-gray-100 px-3 py-2 text-xs text-gray-700 dark:bg-zinc-700 dark:text-gray-200">
                   <span className="font-semibold">Examples:</span>{" "}
@@ -176,7 +166,7 @@ export function ImportPackageJsonModal(props: ImportPackageJsonModalProps) {
                     disabled={!canImport}
                     className="rounded-md bg-yellow-400 px-4 py-2 text-sm font-semibold text-zinc-900 hover:bg-yellow-300 disabled:cursor-not-allowed disabled:opacity-60"
                   >
-                    {loading ? "Importing..." : "Import package.json"}
+                    {loading ? "Importing…" : "Import JSON"}
                   </button>
                 </div>
               </Dialog.Panel>

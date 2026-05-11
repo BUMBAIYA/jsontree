@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { JsonIcon } from "@/components/icons";
-import { ImportPackageJsonModal } from "@/components/modals/ImportPackageJsonModal";
+import { ImportJsonUrlModal } from "@/components/modals/ImportJsonUrlModal";
 import { JsonStatsModal } from "@/components/modals/JsonStatsModal";
 import { useApp } from "@/store/useApp";
 import Tools from "@/components/Toolbar/Tools";
@@ -20,7 +20,7 @@ export function Toolbar() {
       <Searchbar />
       <button
         type="button"
-        aria-label="Import package.json"
+        aria-label="Import JSON from URL"
         onClick={openImportModal}
         className="inline-flex h-8 w-8 items-center justify-center gap-1 rounded-md border border-gray-300 p-0 text-sm text-gray-700 hover:bg-gray-200 dark:border-gray-500 dark:bg-vsdark-500 dark:text-gray-300 dark:hover:border-yellow-400 dark:hover:text-yellow-400 sm:w-auto sm:px-2 sm:py-1"
       >
@@ -57,7 +57,7 @@ export function Toolbar() {
         onOpenStatsModal={openStatsModal}
         onToggleSchemaMode={() => void toggleSchemaMode()}
       />
-      <ImportPackageJsonModal
+      <ImportJsonUrlModal
         isOpen={isImportModalOpen}
         setOpen={setIsImportModal}
       />
