@@ -14,6 +14,7 @@ import Navbar from "@/components/Navbar";
 import { useTree } from "@/store/useTree";
 import { useBreakpoint } from "@/hooks/useBreakpoint";
 import { useStored } from "@/store/useStored";
+import { useJsonDrop } from "@/hooks/useJsonDrop";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -32,6 +33,8 @@ export default function Home() {
   const fullscreen = useTree((state) => state.fullscreen);
   const toggleFullscreen = useTree((state) => state.toggleFullscreen);
   const lightmode = useStored((state) => state.lightmode);
+  const { isDragActive, onDragEnter, onDragLeave, onDragOver, onDrop } =
+    useJsonDrop();
 
   const { isScreenLessThan } = useBreakpoint(768);
 
@@ -54,7 +57,13 @@ export default function Home() {
   }, [isScreenLessThan, toggleFullscreen]);
 
   return (
-    <div className="h-screen">
+    <div
+      className="relative h-screen"
+      onDragEnter={onDragEnter}
+      onDragLeave={onDragLeave}
+      onDragOver={onDragOver}
+      onDrop={onDrop}
+    >
       <PageSEO
         title="Json Tree Viewer"
         description="Visualisation tool for json in a graph and tree form"
@@ -91,6 +100,11 @@ export default function Home() {
         </main>
       </div>
       <EditorInfobar />
+      {isDragActive && (
+        <div className="pointer-events-none absolute inset-0 z-50 grid place-items-center bg-vsdark-500/30 dark:bg-white/10 dark:text-white">
+          Drop your JSON file here
+        </div>
+      )}
     </div>
   );
 }
