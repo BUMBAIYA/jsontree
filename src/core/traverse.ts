@@ -81,7 +81,7 @@ function handleHasChildren(
         (e) =>
           e.parentId === states.brothersParentId &&
           e.objectsFromArrayId ===
-          states.objectsFromArray[states.objectsFromArray.length - 1],
+            states.objectsFromArray[states.objectsFromArray.length - 1],
       );
 
       if (findBrothersNode) {
@@ -134,7 +134,7 @@ function handleHasChildren(
       (e) =>
         e.parentId === myParentId &&
         e.objectsFromArrayId ===
-        states.objectsFromArray[states.objectsFromArray.length - 1],
+          states.objectsFromArray[states.objectsFromArray.length - 1],
     );
 
     if (
@@ -189,7 +189,7 @@ function handleHasChildren(
         (e) =>
           e.parentId === states.brothersParentId &&
           e.objectsFromArrayId ===
-          states.objectsFromArray[states.objectsFromArray.length - 1],
+            states.objectsFromArray[states.objectsFromArray.length - 1],
       );
 
       if (findBrothersNode) {
@@ -269,18 +269,12 @@ function handleHasChildren(
           edgeToParent?.from != null
             ? graph.nodes.findIndex((n) => n.id === edgeToParent.from)
             : -1;
-        if (
-          broIndex !== -1 &&
-          Array.isArray(graph.nodes[broIndex].text)
-        ) {
+        if (broIndex !== -1 && Array.isArray(graph.nodes[broIndex].text)) {
           const suffix =
             savedParentKey.type === "object"
               ? `{${childrenCount}}`
               : `[${childrenCount}]`;
-          graph.nodes[broIndex].text.push([
-            savedParentKey.name,
-            suffix,
-          ]);
+          graph.nodes[broIndex].text.push([savedParentKey.name, suffix]);
           // Our heirarchy: (1) Parent Object -> (2) Intermediate Node -> (3) Actual Data Node
           // We need to target the actual data node, not the intermediate
           const firstChildEdge = graph.edges.find((e) => e.from === parentId);

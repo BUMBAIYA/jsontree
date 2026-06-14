@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "formatting:fix": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md,mdx}\""
   },
   "dependencies": {
     "@headlessui/react": "^1.7.15",
@@ -39,6 +40,5 @@
     "@types/lodash.debounce": "^4.0.7",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.3"
-  },
-  "packageManager": "pnpm@11.0.9+sha512.34ce82e6780233cf9cad8685029a8f81d2e06196c5a9bad98879f7424940c6817c4e4524fb7d38b8553ceed48b9758b8ebaf1abd3600c232c4c8cf7366086f38"
+  }
 }

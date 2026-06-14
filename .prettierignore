@@ -1,6 +1,6 @@
 yarn.lock
 package-lock.json
-package.json
+pnpm-lock.yaml
 node_modules
 .next
 .vscode
