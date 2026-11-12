@@ -50,6 +50,8 @@ function handleNoChildren(
     const nodeFromArrayId = addNodeToGraph({ graph, text: String(value) });
     if (myParentId) {
       addEdgeToGraph(graph, myParentId, nodeFromArrayId);
+    } else {
+      states.notHaveParent.push(nodeFromArrayId);
     }
   }
 

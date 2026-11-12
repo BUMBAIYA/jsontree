@@ -58,7 +58,7 @@ export function parser(jsonStr: string): Graph {
     traverse({ states, objectToTraverse: parsedJsonTree });
 
     const { notHaveParent, graph } = states;
-    if (notHaveParent.length > 1 && parsedJsonTree.type !== "array") {
+    if (notHaveParent.length > 1) {
       const emptyNode = { id: null, text: "", isEmpty: true, data: {} };
       const emptyId = addNodeToGraph({ graph, ...emptyNode });
       notHaveParent.forEach((childId) =>
