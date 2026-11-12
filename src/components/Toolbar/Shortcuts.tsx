@@ -33,6 +33,9 @@ export default function Shortcuts(props: ShortcutsProps) {
   const zoomOut = useTree((state) => state.zoomOut);
   const direction = useTree((state) => state.direction);
   const setDirection = useTree((state) => state.setDirection);
+  const graphCollapsed = useTree((state) => state.graphCollapsed);
+  const expandGraph = useTree((state) => state.expandGraph);
+  const collapseGraph = useTree((state) => state.collapseGraph);
 
   const [isDownloadModalOpen, setIsDownloadModal] = useState(false);
 
@@ -54,7 +57,13 @@ export default function Shortcuts(props: ShortcutsProps) {
     setDirection(nextDirection);
   };
 
+  const toggleAllNodes = () => {
+    if (graphCollapsed) expandGraph();
+    else collapseGraph();
+  };
+
   useHotkeys([
+    ["mod,shift,X", toggleAllNodes],
     ["mod,shift,E", toggleEditor],
     ["mod,shift,D", toggleDirection],
     ["mod,shift,I", onOpenImportModal],
@@ -213,6 +222,32 @@ export default function Shortcuts(props: ShortcutsProps) {
                     }`}
                   >
                     {modKey} SHIFT D
+                  </kbd>
+                </button>
+              )}
+            </Menu.Item>
+            <Menu.Item>
+              {({ active }) => (
+                <button
+                  className={`${
+                    active
+                      ? "bg-gray-900 text-white dark:text-yellow-400"
+                      : "text-gray-900 dark:text-white"
+                  } group flex w-full items-center gap-2 rounded-md px-2 py-2 text-sm md:justify-between`}
+                  onClick={toggleAllNodes}
+                >
+                  <div className="h-4 w-4 md:hidden">
+                    <FocusIcon />
+                  </div>
+                  {graphCollapsed ? "Expand all nodes" : "Collapse all nodes"}
+                  <kbd
+                    className={`ml-2 hidden rounded-md border border-gray-200 p-1 text-xs md:inline ${
+                      active
+                        ? "border-gray-100 bg-yellow-300 text-gray-900"
+                        : "bg-gray-200 dark:text-gray-900"
+                    }`}
+                  >
+                    {modKey} SHIFT X
                   </kbd>
                 </button>
               )}
